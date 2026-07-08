@@ -112,7 +112,7 @@ BaseHandles {
     signal point2Moved(point position)
 
     function bodyScenePoint(localPoint) {
-        return Qt.point(bodyMouseArea.x + localPoint.x, bodyMouseArea.y + localPoint.y);
+        return root.mapFromItem(bodyMouseArea, localPoint);
     }
     function containsBodyPoint(localPoint) {
         return containsBodyScenePoint(bodyScenePoint(localPoint));
@@ -150,7 +150,7 @@ BaseHandles {
             root._bodyHovered = root.containsBodyPoint(Qt.point(event.x, event.y));
             if (!root._bodyDragging || !root.movable)
                 return;
-            let currentPoint = root.dataTransform.inverted().map(Qt.point(bodyMouseArea.x + event.x, bodyMouseArea.y + event.y));
+            let currentPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
             let delta = Qt.point(currentPoint.x - root._lastDragPoint.x, currentPoint.y - root._lastDragPoint.y);
             root._lastDragPoint = currentPoint;
             root.moved(delta);
@@ -164,7 +164,7 @@ BaseHandles {
             root._bodyDragging = true;
             if (root.clickable)
                 root.clicked();
-            root._lastDragPoint = root.dataTransform.inverted().map(Qt.point(bodyMouseArea.x + event.x, bodyMouseArea.y + event.y));
+            root._lastDragPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
         }
         onReleased: {
             root._bodyDragging = false;
