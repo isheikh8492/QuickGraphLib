@@ -29,8 +29,6 @@ set(QGL_GI_QML_FILES
     PolylineRoi.qml
     Rectangle.qml
     RectangleRoi.qml
-    RoiHandle.qml
-    RoiHandleRepeater.qml
     RoiHitTest.js
     ColorMesh.qml
 )

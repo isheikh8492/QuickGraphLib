@@ -69,6 +69,10 @@ Item {
     */
     property bool movable: true
     /*!
+        Stable application-facing name for this handle.
+    */
+    property string name: ""
+    /*!
         The handle position in data coordinates.
     */
     required property point position

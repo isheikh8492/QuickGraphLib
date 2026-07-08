@@ -22,13 +22,6 @@ Item {
     property bool _bodyHovered: false
     property point _lastDragPoint: Qt.point(0, 0)
     /*!
-        Whether this ROI should rebuild \l handles from \l points automatically.
-
-        Set this to false before assigning a custom handle list.
-    */
-    property bool autoHandles: true
-
-    /*!
         Must be assigned the data transform of the graph area this ROI is paired to.
 
         \sa GraphArea::dataTransform
@@ -63,9 +56,9 @@ Item {
     */
     property real handleStrokeWidth: 1
     /*!
-        Handle configuration objects rendered by this ROI.
+        GraphHandle objects rendered by this ROI.
     */
-    property var handles: []
+    readonly property var handles: vertexHandleRepeater.items
     /*!
         Whether vertex handles should be visible.
     */
@@ -113,7 +106,7 @@ Item {
     /*!
         Emitted when \a handle has moved to \a position in data coordinates.
     */
-    signal handleMoved(RoiHandle handle, point position)
+    signal handleMoved(GraphHandle handle, point position)
     /*!
         Emitted when the polygon body has moved by \a delta in data coordinates.
     */
@@ -131,18 +124,6 @@ Item {
     function bodyScenePoint(localPoint) {
         return Qt.point(bodyMouseArea.x + localPoint.x, bodyMouseArea.y + localPoint.y);
     }
-    function configureHandle(handle, index) {
-        handle.cursorShape = Qt.PointingHandCursor;
-        handle.delegate = root.vertexHandleDelegate;
-        handle.hitSize = root.handleHitSize;
-        handle.movable = root.vertexHandlesMovable;
-        handle.name = "point" + index;
-        handle.position = root.points[index];
-        handle.role = GraphHandle.Resize;
-        handle.shape = root.vertexHandleShape;
-        handle.size = root.handleSize;
-        handle.visible = root.handlesVisible;
-    }
     function containsBodyPoint(localPoint) {
         return containsBodyScenePoint(bodyScenePoint(localPoint));
     }
@@ -152,56 +133,51 @@ Item {
     function handleIndex(handle) {
         return parseInt(handle.name.slice(5));
     }
-    function rebuildHandles() {
-        if (!autoHandles)
-            return;
-
-        let oldHandles = handles;
-        handles = [];
-        for (let oldIndex = 0; oldIndex < oldHandles.length; oldIndex++) {
-            oldHandles[oldIndex].destroy();
-        }
-
-        let nextHandles = [];
-        for (let index = 0; index < points.length; index++) {
-            let handle = vertexHandleComponent.createObject(root);
-            configureHandle(handle, index);
-            nextHandles.push(handle);
-        }
-        handles = nextHandles;
-    }
-    function updateHandles() {
-        if (!autoHandles)
-            return;
-
-        if (handles.length !== points.length) {
-            rebuildHandles();
-            return;
-        }
-
-        for (let index = 0; index < handles.length; index++) {
-            configureHandle(handles[index], index);
-        }
-    }
 
     height: parent ? parent.height : 0
     width: parent ? parent.width : 0
     x: 0
     y: 0
 
-    Component.onCompleted: rebuildHandles()
-    onHandleHitSizeChanged: updateHandles()
-    onHandleSizeChanged: updateHandles()
-    onHandlesVisibleChanged: updateHandles()
-    onPointsChanged: updateHandles()
-    onVertexHandleDelegateChanged: updateHandles()
-    onVertexHandleShapeChanged: updateHandles()
-    onVertexHandlesMovableChanged: updateHandles()
+    Repeater {
+        id: vertexHandleRepeater
 
-    Component {
-        id: vertexHandleComponent
+        readonly property var items: Array.from({
+            length: count
+        }, (_, index) => itemAt(index))
 
-        RoiHandle {
+        model: root.points.length
+
+        GraphHandle {
+            id: vertexGraphHandle
+
+            required property int index
+
+            cursorShape: Qt.PointingHandCursor
+            dataTransform: root.dataTransform
+            delegate: root.vertexHandleDelegate
+            fillColor: root.handleFillColor
+            hitSize: root.handleHitSize
+            hoverFillColor: root.handleHoverFillColor
+            movable: root.vertexHandlesMovable
+            name: "point" + index
+            position: root.points[index]
+            role: GraphHandle.Resize
+            selectable: root.selectable
+            selected: root.selected
+            selectedFillColor: root.handleSelectedFillColor
+            shape: root.vertexHandleShape
+            size: root.handleSize
+            strokeColor: root.handleStrokeColor
+            strokeWidth: root.handleStrokeWidth
+            visible: root.handlesVisible
+            z: 10
+
+            onMoved: position => {
+                root.handleMoved(vertexGraphHandle, position);
+                root.pointMoved(index, position);
+            }
+            onSelectionRequested: root.selectionRequested()
         }
     }
     MouseArea {
@@ -244,23 +220,5 @@ Item {
         onReleased: {
             root._bodyDragging = false;
         }
-    }
-    RoiHandleRepeater {
-        dataTransform: root.dataTransform
-        fillColor: root.handleFillColor
-        handles: root.handles
-        hoverFillColor: root.handleHoverFillColor
-        selectable: root.selectable
-        selected: root.selected
-        selectedFillColor: root.handleSelectedFillColor
-        strokeColor: root.handleStrokeColor
-        strokeWidth: root.handleStrokeWidth
-
-        onHandleMoved: (handle, position) => {
-            let index = root.handleIndex(handle);
-            root.handleMoved(handle, position);
-            root.pointMoved(index, position);
-        }
-        onHandleSelectionRequested: handle => root.selectionRequested()
     }
 }

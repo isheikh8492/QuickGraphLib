@@ -28,17 +28,17 @@ Item {
     /*!
         A direct reference to the bottom-left corner resize handle.
     */
-    readonly property RoiHandle bottomLeftHandle: bottomLeftHandleSpec
+    readonly property alias bottomLeftHandle: bottomLeftGraphHandle
     readonly property point bottomLeftPoint: Qt.point(dataLeft, dataBottom)
     /*!
         A direct reference to the bottom-right corner resize handle.
     */
-    readonly property RoiHandle bottomRightHandle: bottomRightHandleSpec
+    readonly property alias bottomRightHandle: bottomRightGraphHandle
     readonly property point bottomRightPoint: Qt.point(dataRight, dataBottom)
     /*!
         A direct reference to the optional center move handle.
     */
-    readonly property RoiHandle centerHandle: centerHandleSpec
+    readonly property alias centerHandle: centerGraphHandle
     /*!
         Optional visual delegate used for the center move handle.
 
@@ -111,76 +111,7 @@ Item {
         The handle outline width.
     */
     property real handleStrokeWidth: 1
-    /*!
-        Handle configuration objects rendered by this ROI.
-    */
-    property list<RoiHandle> handles: [
-        RoiHandle {
-            id: topLeftHandleSpec
-
-            cursorShape: Qt.SizeBDiagCursor
-            delegate: root.cornerHandleDelegate
-            movable: root.cornerHandlesMovable
-            name: "topLeft"
-            position: root.topLeftPoint
-            role: GraphHandle.Resize
-            shape: root.cornerHandleShape
-            size: root.handleSize
-            visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
-        },
-        RoiHandle {
-            id: topRightHandleSpec
-
-            cursorShape: Qt.SizeFDiagCursor
-            delegate: root.cornerHandleDelegate
-            movable: root.cornerHandlesMovable
-            name: "topRight"
-            position: root.topRightPoint
-            role: GraphHandle.Resize
-            shape: root.cornerHandleShape
-            size: root.handleSize
-            visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
-        },
-        RoiHandle {
-            id: bottomLeftHandleSpec
-
-            cursorShape: Qt.SizeFDiagCursor
-            delegate: root.cornerHandleDelegate
-            movable: root.cornerHandlesMovable
-            name: "bottomLeft"
-            position: root.bottomLeftPoint
-            role: GraphHandle.Resize
-            shape: root.cornerHandleShape
-            size: root.handleSize
-            visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
-        },
-        RoiHandle {
-            id: bottomRightHandleSpec
-
-            cursorShape: Qt.SizeBDiagCursor
-            delegate: root.cornerHandleDelegate
-            movable: root.cornerHandlesMovable
-            name: "bottomRight"
-            position: root.bottomRightPoint
-            role: GraphHandle.Resize
-            shape: root.cornerHandleShape
-            size: root.handleSize
-            visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
-        },
-        RoiHandle {
-            id: centerHandleSpec
-
-            cursorShape: Qt.SizeAllCursor
-            delegate: root.centerHandleDelegate
-            movable: root.movable
-            name: "center"
-            position: root.centerPoint
-            role: GraphHandle.Move
-            shape: root.centerHandleShape
-            size: root.centerHandleSize
-            visible: root.handlesVisible && root.handleMode === RectangleRoi.CornersAndCenter
-        }
-    ]
+    readonly property var handles: [topLeftGraphHandle, topRightGraphHandle, bottomLeftGraphHandle, bottomRightGraphHandle, centerGraphHandle]
     /*!
         Whether handles should be visible.
     */
@@ -213,18 +144,18 @@ Item {
     /*!
         A direct reference to the top-left corner resize handle.
     */
-    readonly property RoiHandle topLeftHandle: topLeftHandleSpec
+    readonly property alias topLeftHandle: topLeftGraphHandle
     readonly property point topLeftPoint: Qt.point(dataLeft, dataTop)
     /*!
         A direct reference to the top-right corner resize handle.
     */
-    readonly property RoiHandle topRightHandle: topRightHandleSpec
+    readonly property alias topRightHandle: topRightGraphHandle
     readonly property point topRightPoint: Qt.point(dataRight, dataTop)
 
     /*!
         Emitted when \a handle has moved to \a position in data coordinates.
     */
-    signal handleMoved(RoiHandle handle, point position)
+    signal handleMoved(GraphHandle handle, point position)
     /*!
         Emitted when the rectangle body has moved by \a delta in data coordinates.
     */
@@ -311,25 +242,144 @@ Item {
             root._lastDragPoint = root.dataTransform.inverted().map(Qt.point(bodyMouseArea.x + event.x, bodyMouseArea.y + event.y));
         }
     }
-    RoiHandleRepeater {
+    GraphHandle {
+        id: topLeftGraphHandle
+
+        cursorShape: Qt.SizeBDiagCursor
         dataTransform: root.dataTransform
+        delegate: root.cornerHandleDelegate
         fillColor: root.handleFillColor
-        handles: root.handles
         hoverFillColor: root.handleHoverFillColor
+        movable: root.cornerHandlesMovable
+        name: "topLeft"
+        position: root.topLeftPoint
+        role: GraphHandle.Resize
         selectable: root.selectable
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
+        shape: root.cornerHandleShape
+        size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
+        visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
+        z: 10
 
-        onHandleMoved: (handle, position) => {
-            root.handleMoved(handle, position);
-            if (handle.role === GraphHandle.Resize) {
-                root.resized(root.resizedFromHandle(handle, position));
-            } else if (handle.role === GraphHandle.Move) {
-                root.moved(Qt.point(position.x - handle.position.x, position.y - handle.position.y));
-            }
+        onMoved: position => {
+            root.handleMoved(topLeftGraphHandle, position);
+            root.resized(root.resizedFromHandle(topLeftGraphHandle, position));
         }
-        onHandleSelectionRequested: handle => root.selectionRequested()
+        onSelectionRequested: root.selectionRequested()
+    }
+    GraphHandle {
+        id: topRightGraphHandle
+
+        cursorShape: Qt.SizeFDiagCursor
+        dataTransform: root.dataTransform
+        delegate: root.cornerHandleDelegate
+        fillColor: root.handleFillColor
+        hoverFillColor: root.handleHoverFillColor
+        movable: root.cornerHandlesMovable
+        name: "topRight"
+        position: root.topRightPoint
+        role: GraphHandle.Resize
+        selectable: root.selectable
+        selected: root.selected
+        selectedFillColor: root.handleSelectedFillColor
+        shape: root.cornerHandleShape
+        size: root.handleSize
+        strokeColor: root.handleStrokeColor
+        strokeWidth: root.handleStrokeWidth
+        visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
+        z: 10
+
+        onMoved: position => {
+            root.handleMoved(topRightGraphHandle, position);
+            root.resized(root.resizedFromHandle(topRightGraphHandle, position));
+        }
+        onSelectionRequested: root.selectionRequested()
+    }
+    GraphHandle {
+        id: bottomLeftGraphHandle
+
+        cursorShape: Qt.SizeFDiagCursor
+        dataTransform: root.dataTransform
+        delegate: root.cornerHandleDelegate
+        fillColor: root.handleFillColor
+        hoverFillColor: root.handleHoverFillColor
+        movable: root.cornerHandlesMovable
+        name: "bottomLeft"
+        position: root.bottomLeftPoint
+        role: GraphHandle.Resize
+        selectable: root.selectable
+        selected: root.selected
+        selectedFillColor: root.handleSelectedFillColor
+        shape: root.cornerHandleShape
+        size: root.handleSize
+        strokeColor: root.handleStrokeColor
+        strokeWidth: root.handleStrokeWidth
+        visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
+        z: 10
+
+        onMoved: position => {
+            root.handleMoved(bottomLeftGraphHandle, position);
+            root.resized(root.resizedFromHandle(bottomLeftGraphHandle, position));
+        }
+        onSelectionRequested: root.selectionRequested()
+    }
+    GraphHandle {
+        id: bottomRightGraphHandle
+
+        cursorShape: Qt.SizeBDiagCursor
+        dataTransform: root.dataTransform
+        delegate: root.cornerHandleDelegate
+        fillColor: root.handleFillColor
+        hoverFillColor: root.handleHoverFillColor
+        movable: root.cornerHandlesMovable
+        name: "bottomRight"
+        position: root.bottomRightPoint
+        role: GraphHandle.Resize
+        selectable: root.selectable
+        selected: root.selected
+        selectedFillColor: root.handleSelectedFillColor
+        shape: root.cornerHandleShape
+        size: root.handleSize
+        strokeColor: root.handleStrokeColor
+        strokeWidth: root.handleStrokeWidth
+        visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
+        z: 10
+
+        onMoved: position => {
+            root.handleMoved(bottomRightGraphHandle, position);
+            root.resized(root.resizedFromHandle(bottomRightGraphHandle, position));
+        }
+        onSelectionRequested: root.selectionRequested()
+    }
+    GraphHandle {
+        id: centerGraphHandle
+
+        cursorShape: Qt.SizeAllCursor
+        dataTransform: root.dataTransform
+        delegate: root.centerHandleDelegate
+        fillColor: root.handleFillColor
+        hoverFillColor: root.handleHoverFillColor
+        movable: root.movable
+        name: "center"
+        position: root.centerPoint
+        role: GraphHandle.Move
+        selectable: root.selectable
+        selected: root.selected
+        selectedFillColor: root.handleSelectedFillColor
+        shape: root.centerHandleShape
+        size: root.centerHandleSize
+        strokeColor: root.handleStrokeColor
+        strokeWidth: root.handleStrokeWidth
+        visible: root.handlesVisible && root.handleMode === RectangleRoi.CornersAndCenter
+        z: 10
+
+        onMoved: position => {
+            root.handleMoved(centerGraphHandle, position);
+            root.moved(Qt.point(position.x - centerGraphHandle.position.x, position.y - centerGraphHandle.position.y));
+        }
+        onSelectionRequested: root.selectionRequested()
     }
 }

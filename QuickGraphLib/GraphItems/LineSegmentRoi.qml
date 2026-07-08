@@ -30,7 +30,7 @@ Item {
     /*!
         A direct reference to the optional center move handle.
     */
-    readonly property RoiHandle centerHandle: centerHandleSpec
+    readonly property alias centerHandle: centerGraphHandle
     /*!
         Optional visual delegate used for the center move handle.
 
@@ -95,50 +95,7 @@ Item {
         The handle outline width.
     */
     property real handleStrokeWidth: 1
-    /*!
-        Handle configuration objects rendered by this ROI.
-    */
-    property list<RoiHandle> handles: [
-        RoiHandle {
-            id: point1HandleSpec
-
-            cursorShape: Qt.PointingHandCursor
-            delegate: root.endpointHandleDelegate
-            movable: root.endpointHandlesMovable
-            name: "point1"
-            position: root.point1
-            role: GraphHandle.Resize
-            shape: root.endpointHandleShape
-            size: root.handleSize
-            visible: root.handlesVisible && root.handleMode !== LineSegmentRoi.NoHandles
-        },
-        RoiHandle {
-            id: point2HandleSpec
-
-            cursorShape: Qt.PointingHandCursor
-            delegate: root.endpointHandleDelegate
-            movable: root.endpointHandlesMovable
-            name: "point2"
-            position: root.point2
-            role: GraphHandle.Resize
-            shape: root.endpointHandleShape
-            size: root.handleSize
-            visible: root.handlesVisible && root.handleMode !== LineSegmentRoi.NoHandles
-        },
-        RoiHandle {
-            id: centerHandleSpec
-
-            cursorShape: Qt.SizeAllCursor
-            delegate: root.centerHandleDelegate
-            movable: root.movable
-            name: "center"
-            position: root.centerPoint
-            role: GraphHandle.Move
-            shape: root.centerHandleShape
-            size: root.centerHandleSize
-            visible: root.handlesVisible && root.handleMode === LineSegmentRoi.EndpointsAndCenter
-        }
-    ]
+    readonly property var handles: [point1GraphHandle, point2GraphHandle, centerGraphHandle]
     /*!
         Whether handles should be visible.
     */
@@ -161,7 +118,7 @@ Item {
     /*!
         A direct reference to the first endpoint resize handle.
     */
-    readonly property RoiHandle point1Handle: point1HandleSpec
+    readonly property alias point1Handle: point1GraphHandle
     /*!
         The second endpoint in data coordinates.
     */
@@ -169,7 +126,7 @@ Item {
     /*!
         A direct reference to the second endpoint resize handle.
     */
-    readonly property RoiHandle point2Handle: point2HandleSpec
+    readonly property alias point2Handle: point2GraphHandle
     /*!
         Whether pressing the segment or handles should emit \l selectionRequested.
     */
@@ -182,7 +139,7 @@ Item {
     /*!
         Emitted when \a handle has moved to \a position in data coordinates.
     */
-    signal handleMoved(RoiHandle handle, point position)
+    signal handleMoved(GraphHandle handle, point position)
     /*!
         Emitted when the segment body or move handle has moved by \a delta in data coordinates.
     */
@@ -260,27 +217,88 @@ Item {
             root._bodyDragging = false;
         }
     }
-    RoiHandleRepeater {
+    GraphHandle {
+        id: point1GraphHandle
+
+        cursorShape: Qt.PointingHandCursor
         dataTransform: root.dataTransform
+        delegate: root.endpointHandleDelegate
         fillColor: root.handleFillColor
-        handles: root.handles
         hoverFillColor: root.handleHoverFillColor
+        movable: root.endpointHandlesMovable
+        name: "point1"
+        position: root.point1
+        role: GraphHandle.Resize
         selectable: root.selectable
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
+        shape: root.endpointHandleShape
+        size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
+        visible: root.handlesVisible && root.handleMode !== LineSegmentRoi.NoHandles
+        z: 10
 
-        onHandleMoved: (handle, position) => {
-            root.handleMoved(handle, position);
-            if (handle.name === "point1") {
-                root.point1Moved(position);
-            } else if (handle.name === "point2") {
-                root.point2Moved(position);
-            } else if (handle.role === GraphHandle.Move) {
-                root.moved(Qt.point(position.x - handle.position.x, position.y - handle.position.y));
-            }
+        onMoved: position => {
+            root.handleMoved(point1GraphHandle, position);
+            root.point1Moved(position);
         }
-        onHandleSelectionRequested: handle => root.selectionRequested()
+        onSelectionRequested: root.selectionRequested()
+    }
+    GraphHandle {
+        id: point2GraphHandle
+
+        cursorShape: Qt.PointingHandCursor
+        dataTransform: root.dataTransform
+        delegate: root.endpointHandleDelegate
+        fillColor: root.handleFillColor
+        hoverFillColor: root.handleHoverFillColor
+        movable: root.endpointHandlesMovable
+        name: "point2"
+        position: root.point2
+        role: GraphHandle.Resize
+        selectable: root.selectable
+        selected: root.selected
+        selectedFillColor: root.handleSelectedFillColor
+        shape: root.endpointHandleShape
+        size: root.handleSize
+        strokeColor: root.handleStrokeColor
+        strokeWidth: root.handleStrokeWidth
+        visible: root.handlesVisible && root.handleMode !== LineSegmentRoi.NoHandles
+        z: 10
+
+        onMoved: position => {
+            root.handleMoved(point2GraphHandle, position);
+            root.point2Moved(position);
+        }
+        onSelectionRequested: root.selectionRequested()
+    }
+    GraphHandle {
+        id: centerGraphHandle
+
+        cursorShape: Qt.SizeAllCursor
+        dataTransform: root.dataTransform
+        delegate: root.centerHandleDelegate
+        fillColor: root.handleFillColor
+        hoverFillColor: root.handleHoverFillColor
+        movable: root.movable
+        name: "center"
+        position: root.centerPoint
+        role: GraphHandle.Move
+        selectable: root.selectable
+        selected: root.selected
+        selectedFillColor: root.handleSelectedFillColor
+        shape: root.centerHandleShape
+        size: root.centerHandleSize
+        strokeColor: root.handleStrokeColor
+        strokeWidth: root.handleStrokeWidth
+        visible: root.handlesVisible && root.handleMode === LineSegmentRoi.EndpointsAndCenter
+        z: 10
+
+        onMoved: position => {
+            root.handleMoved(centerGraphHandle, position);
+            root.moved(Qt.point(position.x - centerGraphHandle.position.x, position.y - centerGraphHandle.position.y));
+        }
+        onSelectionRequested: root.selectionRequested()
     }
 }
