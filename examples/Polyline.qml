@@ -42,14 +42,14 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.PolylineHandles {
+        clickable: true
         dataTransform: axes.dataTransform
         movable: true
         points: axes.editablePoints
-        selectable: true
         selected: axes.polylineSelected
 
+        onClicked: axes.polylineSelected = true
         onMoved: delta => axes.moveEditablePolyline(delta)
         onPointMoved: (index, position) => axes.moveEditablePoint(index, position)
-        onSelectionRequested: axes.polylineSelected = true
     }
 }

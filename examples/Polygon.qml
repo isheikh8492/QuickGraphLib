@@ -44,14 +44,14 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.PolygonHandles {
+        clickable: true
         dataTransform: axes.dataTransform
         movable: true
         points: axes.editablePoints
-        selectable: true
         selected: axes.polygonSelected
 
+        onClicked: axes.polygonSelected = true
         onMoved: delta => axes.moveEditablePolygon(delta)
         onPointMoved: (index, position) => axes.moveEditablePoint(index, position)
-        onSelectionRequested: axes.polygonSelected = true
     }
 }

@@ -10,13 +10,18 @@ import QtQuick
     \internal
     \brief Shared base contract for graph handle overlays.
 
-    BaseHandles centralizes the common styling, selection and movement signal contract used by
+    BaseHandles centralizes the common styling, click and movement signal contract used by
     concrete handle overlay items. Applications should instantiate the concrete handle types rather
     than BaseHandles directly.
 */
 
 Item {
     id: root
+
+    /*!
+        Whether pressing the item or handles should emit \l clicked.
+    */
+    property bool clickable: true
 
     /*!
         Must be assigned the data transform of the graph area this handle item is paired to.
@@ -49,20 +54,17 @@ Item {
     */
     property bool handlesVisible: selected
     /*!
-        Whether pressing the item or handles should emit \l selectionRequested.
-    */
-    property bool selectable: true
-    /*!
         Whether the handle item should be drawn in the selected state.
     */
     property bool selected: false
 
     /*!
+        Emitted when the handle item is clicked.
+    */
+    signal clicked
+
+    /*!
         Emitted when \a handle has moved to \a position in data coordinates.
     */
     signal handleMoved(GraphHandle handle, point position)
-    /*!
-        Emitted when the handle item requests selection.
-    */
-    signal selectionRequested
 }

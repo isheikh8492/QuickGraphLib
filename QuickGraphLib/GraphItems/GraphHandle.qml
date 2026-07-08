@@ -29,6 +29,10 @@ Item {
 
     property point _pressOffset: Qt.point(0, 0)
     /*!
+        Whether pressing the handle should emit \l clicked.
+    */
+    property bool clickable: true
+    /*!
         The mouse cursor shown while hovering the handle.
     */
     property int cursorShape: Qt.SizeAllCursor
@@ -84,10 +88,6 @@ Item {
     */
     property int role: GraphHandle.Custom
     /*!
-        Whether pressing the handle should emit \l selectionRequested.
-    */
-    property bool selectable: true
-    /*!
         Whether the handle should be drawn in the selected style.
     */
     property bool selected: false
@@ -113,14 +113,14 @@ Item {
     property real strokeWidth: 1
 
     /*!
+        Emitted when the handle is clicked.
+    */
+    signal clicked
+
+    /*!
         Emitted when the handle has moved to \a position in data coordinates.
     */
     signal moved(point position)
-
-    /*!
-        Emitted when the handle requests selection.
-    */
-    signal selectionRequested
 
     height: hitSize
     width: hitSize
@@ -164,8 +164,8 @@ Item {
         onPressed: event => {
             root._pressOffset = Qt.point(event.x - root.width / 2, event.y - root.height / 2);
             root.dragging = true;
-            if (root.selectable)
-                root.selectionRequested();
+            if (root.clickable)
+                root.clicked();
         }
         onReleased: event => {
             root.dragging = false;

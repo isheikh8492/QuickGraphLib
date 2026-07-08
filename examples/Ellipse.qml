@@ -39,15 +39,15 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.EllipseHandles {
+        clickable: true
         dataRect: axes.editableEllipseRect
         dataTransform: axes.dataTransform
         handleMode: QGLGraphItems.EllipseHandles.Cardinal
         movable: true
-        selectable: true
         selected: axes.ellipseSelected
 
+        onClicked: axes.ellipseSelected = true
         onMoved: delta => axes.moveEditableEllipse(delta)
         onResized: dataRect => axes.editableEllipseRect = dataRect
-        onSelectionRequested: axes.ellipseSelected = true
     }
 }

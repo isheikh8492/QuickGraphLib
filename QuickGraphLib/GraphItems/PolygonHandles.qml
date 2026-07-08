@@ -106,6 +106,7 @@ BaseHandles {
 
             required property int index
 
+            clickable: root.clickable
             cursorShape: Qt.PointingHandCursor
             dataTransform: root.dataTransform
             delegate: root.vertexHandleDelegate
@@ -116,7 +117,6 @@ BaseHandles {
             name: "point" + index
             position: root.points[index]
             role: GraphHandle.Resize
-            selectable: root.selectable
             selected: root.selected
             selectedFillColor: root.handleSelectedFillColor
             shape: root.vertexHandleShape
@@ -126,18 +126,18 @@ BaseHandles {
             visible: root.handlesVisible
             z: 10
 
+            onClicked: root.clicked()
             onMoved: position => {
                 root.handleMoved(vertexGraphHandle, position);
                 root.pointMoved(index, position);
             }
-            onSelectionRequested: root.selectionRequested()
         }
     }
     MouseArea {
         id: bodyMouseArea
 
         cursorShape: root.movable && (root._bodyHovered || root._bodyDragging) ? Qt.SizeAllCursor : Qt.ArrowCursor
-        enabled: root.points.length > 0 && (root.selectable || root.movable)
+        enabled: root.points.length > 0 && (root.clickable || root.movable)
         height: Math.max(root.mappedBottom - root.mappedTop + root.hitPadding * 2, root.hitPadding * 2)
         hoverEnabled: true
         width: Math.max(root.mappedRight - root.mappedLeft + root.hitPadding * 2, root.hitPadding * 2)
@@ -166,8 +166,8 @@ BaseHandles {
                 return;
             }
             root._bodyDragging = true;
-            if (root.selectable)
-                root.selectionRequested();
+            if (root.clickable)
+                root.clicked();
             root._lastDragPoint = root.dataTransform.inverted().map(Qt.point(bodyMouseArea.x + event.x, bodyMouseArea.y + event.y));
         }
         onReleased: {

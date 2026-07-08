@@ -42,18 +42,18 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.LineSegmentHandles {
+        clickable: true
         dataTransform: axes.dataTransform
         handleMode: QGLGraphItems.LineSegmentHandles.Endpoints
         movable: true
         point1: axes.editablePoint1
         point2: axes.editablePoint2
-        selectable: true
         selected: axes.lineSegmentSelected
 
+        onClicked: axes.lineSegmentSelected = true
         onMoved: delta => axes.moveEditableLineSegment(delta)
         onPoint1Moved: position => axes.editablePoint1 = position
         onPoint2Moved: position => axes.editablePoint2 = position
-        onSelectionRequested: axes.lineSegmentSelected = true
     }
     QGLGraphItems.LineSegment {
         dashPattern: [8, 4]

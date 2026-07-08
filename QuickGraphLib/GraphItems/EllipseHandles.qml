@@ -176,7 +176,7 @@ BaseHandles {
         property real bodyTop: Math.min(root.mappedTopHandle.y, root.mappedBottomHandle.y)
 
         cursorShape: root.movable && (root._bodyHovered || root._bodyDragging) ? Qt.SizeAllCursor : Qt.ArrowCursor
-        enabled: root.selectable || root.movable
+        enabled: root.clickable || root.movable
         height: bodyBottom - bodyTop
         hoverEnabled: true
         width: bodyRight - bodyLeft
@@ -205,8 +205,8 @@ BaseHandles {
                 return;
             }
             root._bodyDragging = true;
-            if (root.selectable)
-                root.selectionRequested();
+            if (root.clickable)
+                root.clicked();
             root._lastDragPoint = root.dataTransform.inverted().map(Qt.point(bodyMouseArea.x + event.x, bodyMouseArea.y + event.y));
         }
         onReleased: {
@@ -216,6 +216,7 @@ BaseHandles {
     GraphHandle {
         id: leftGraphHandle
 
+        clickable: root.clickable
         cursorShape: Qt.SizeHorCursor
         dataTransform: root.dataTransform
         delegate: root.cardinalHandleDelegate
@@ -225,7 +226,6 @@ BaseHandles {
         name: "left"
         position: root.leftHandlePoint
         role: GraphHandle.Resize
-        selectable: root.selectable
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
         shape: root.cardinalHandleShape
@@ -235,15 +235,16 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
+        onClicked: root.clicked()
         onMoved: position => {
             root.handleMoved(leftGraphHandle, position);
             root.resized(root.resizedFromHandle(leftGraphHandle, position));
         }
-        onSelectionRequested: root.selectionRequested()
     }
     GraphHandle {
         id: rightGraphHandle
 
+        clickable: root.clickable
         cursorShape: Qt.SizeHorCursor
         dataTransform: root.dataTransform
         delegate: root.cardinalHandleDelegate
@@ -253,7 +254,6 @@ BaseHandles {
         name: "right"
         position: root.rightHandlePoint
         role: GraphHandle.Resize
-        selectable: root.selectable
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
         shape: root.cardinalHandleShape
@@ -263,15 +263,16 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
+        onClicked: root.clicked()
         onMoved: position => {
             root.handleMoved(rightGraphHandle, position);
             root.resized(root.resizedFromHandle(rightGraphHandle, position));
         }
-        onSelectionRequested: root.selectionRequested()
     }
     GraphHandle {
         id: topGraphHandle
 
+        clickable: root.clickable
         cursorShape: Qt.SizeVerCursor
         dataTransform: root.dataTransform
         delegate: root.cardinalHandleDelegate
@@ -281,7 +282,6 @@ BaseHandles {
         name: "top"
         position: root.topHandlePoint
         role: GraphHandle.Resize
-        selectable: root.selectable
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
         shape: root.cardinalHandleShape
@@ -291,15 +291,16 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
+        onClicked: root.clicked()
         onMoved: position => {
             root.handleMoved(topGraphHandle, position);
             root.resized(root.resizedFromHandle(topGraphHandle, position));
         }
-        onSelectionRequested: root.selectionRequested()
     }
     GraphHandle {
         id: bottomGraphHandle
 
+        clickable: root.clickable
         cursorShape: Qt.SizeVerCursor
         dataTransform: root.dataTransform
         delegate: root.cardinalHandleDelegate
@@ -309,7 +310,6 @@ BaseHandles {
         name: "bottom"
         position: root.bottomHandlePoint
         role: GraphHandle.Resize
-        selectable: root.selectable
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
         shape: root.cardinalHandleShape
@@ -319,15 +319,16 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
+        onClicked: root.clicked()
         onMoved: position => {
             root.handleMoved(bottomGraphHandle, position);
             root.resized(root.resizedFromHandle(bottomGraphHandle, position));
         }
-        onSelectionRequested: root.selectionRequested()
     }
     GraphHandle {
         id: centerGraphHandle
 
+        clickable: root.clickable
         cursorShape: Qt.SizeAllCursor
         dataTransform: root.dataTransform
         delegate: root.centerHandleDelegate
@@ -337,7 +338,6 @@ BaseHandles {
         name: "center"
         position: root.centerPoint
         role: GraphHandle.Move
-        selectable: root.selectable
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
         shape: root.centerHandleShape
@@ -347,10 +347,10 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode === EllipseHandles.CardinalAndCenter
         z: 10
 
+        onClicked: root.clicked()
         onMoved: position => {
             root.handleMoved(centerGraphHandle, position);
             root.moved(Qt.point(position.x - centerGraphHandle.position.x, position.y - centerGraphHandle.position.y));
         }
-        onSelectionRequested: root.selectionRequested()
     }
 }
