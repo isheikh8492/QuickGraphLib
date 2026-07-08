@@ -15,7 +15,7 @@ import "RoiHitTest.js" as RoiHitTest
     their own model.
 */
 
-Item {
+BaseHandles {
     id: root
 
     enum HandleMode {
@@ -48,12 +48,6 @@ Item {
     readonly property point centerPoint: Qt.point((point1.x + point2.x) / 2, (point1.y + point2.y) / 2)
 
     /*!
-        Must be assigned the data transform of the graph area this handle item is paired to.
-
-        \sa GraphArea::dataTransform
-    */
-    required property matrix4x4 dataTransform
-    /*!
         Optional visual delegate used for endpoint resize handles.
 
         The delegate can read the handle state through \c parent.handle.
@@ -68,38 +62,14 @@ Item {
     */
     property bool endpointHandlesMovable: true
     /*!
-        The normal handle fill color.
-    */
-    property color handleFillColor: "white"
-    /*!
-        The handle fill color used while hovered.
-    */
-    property color handleHoverFillColor: "#fff6bf"
-    /*!
         Which built-in handles should be shown.
     */
     property int handleMode: LineSegmentHandles.Endpoints
     /*!
-        The handle fill color used while selected or dragged.
-    */
-    property color handleSelectedFillColor: "#ffd24d"
-    /*!
         The visual size and hit target size of endpoint handles.
     */
     property real handleSize: 8
-    /*!
-        The handle outline color.
-    */
-    property color handleStrokeColor: "#333333"
-    /*!
-        The handle outline width.
-    */
-    property real handleStrokeWidth: 1
     readonly property var handles: [point1GraphHandle, point2GraphHandle, centerGraphHandle]
-    /*!
-        Whether handles should be visible.
-    */
-    property bool handlesVisible: selected
     /*!
         The body hit target width in pixels.
     */
@@ -127,19 +97,7 @@ Item {
         A direct reference to the second endpoint resize handle.
     */
     readonly property alias point2Handle: point2GraphHandle
-    /*!
-        Whether pressing the segment or handles should emit \l selectionRequested.
-    */
-    property bool selectable: true
-    /*!
-        Whether the handle item should be drawn in the selected state.
-    */
-    property bool selected: false
 
-    /*!
-        Emitted when \a handle has moved to \a position in data coordinates.
-    */
-    signal handleMoved(GraphHandle handle, point position)
     /*!
         Emitted when the segment body or move handle has moved by \a delta in data coordinates.
     */
@@ -152,11 +110,6 @@ Item {
         Emitted when the second endpoint has moved to \a point.
     */
     signal point2Moved(point position)
-
-    /*!
-        Emitted when the handle item requests selection.
-    */
-    signal selectionRequested
 
     function bodyScenePoint(localPoint) {
         return Qt.point(bodyMouseArea.x + localPoint.x, bodyMouseArea.y + localPoint.y);

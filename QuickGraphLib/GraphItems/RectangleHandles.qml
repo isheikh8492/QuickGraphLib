@@ -15,7 +15,7 @@ import "RoiHitTest.js" as RoiHitTest
     applications can update their own model.
 */
 
-Item {
+BaseHandles {
     id: root
 
     enum HandleMode {
@@ -78,44 +78,14 @@ Item {
     readonly property real dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
 
     /*!
-        Must be assigned the data transform of the graph area this handle item is paired to.
-
-        \sa GraphArea::dataTransform
-    */
-    required property matrix4x4 dataTransform
-    /*!
-        The normal handle fill color.
-    */
-    property color handleFillColor: "white"
-    /*!
-        The handle fill color used while hovered.
-    */
-    property color handleHoverFillColor: "#fff6bf"
-    /*!
         Which handles should be shown.
     */
     property int handleMode: RectangleHandles.Corners
     /*!
-        The handle fill color used while selected or dragged.
-    */
-    property color handleSelectedFillColor: "#ffd24d"
-    /*!
         The visual size and hit target size of corner handles.
     */
     property real handleSize: 8
-    /*!
-        The handle outline color.
-    */
-    property color handleStrokeColor: "#333333"
-    /*!
-        The handle outline width.
-    */
-    property real handleStrokeWidth: 1
     readonly property var handles: [topLeftGraphHandle, topRightGraphHandle, bottomLeftGraphHandle, bottomRightGraphHandle, centerGraphHandle]
-    /*!
-        Whether handles should be visible.
-    */
-    property bool handlesVisible: selected
     readonly property point mappedBottomLeft: dataTransform.map(bottomLeftPoint)
     readonly property point mappedBottomRight: dataTransform.map(bottomRightPoint)
     readonly property point mappedTopLeft: dataTransform.map(topLeftPoint)
@@ -133,15 +103,6 @@ Item {
     */
     property bool movable: true
     /*!
-        Whether pressing the rectangle or handles should emit \l selectionRequested.
-    */
-    property bool selectable: true
-    /*!
-        Whether the handle item should be drawn in the selected state.
-    */
-    property bool selected: false
-
-    /*!
         A direct reference to the top-left corner resize handle.
     */
     readonly property alias topLeftHandle: topLeftGraphHandle
@@ -153,10 +114,6 @@ Item {
     readonly property point topRightPoint: Qt.point(dataRight, dataTop)
 
     /*!
-        Emitted when \a handle has moved to \a position in data coordinates.
-    */
-    signal handleMoved(GraphHandle handle, point position)
-    /*!
         Emitted when the rectangle body has moved by \a delta in data coordinates.
     */
     signal moved(point delta)
@@ -164,11 +121,6 @@ Item {
         Emitted when a corner handle has resized the rectangle to \a dataRect.
     */
     signal resized(rect dataRect)
-
-    /*!
-        Emitted when the handle item requests selection.
-    */
-    signal selectionRequested
 
     function bodyScenePoint(localPoint) {
         return Qt.point(bodyMouseArea.x + localPoint.x, bodyMouseArea.y + localPoint.y);

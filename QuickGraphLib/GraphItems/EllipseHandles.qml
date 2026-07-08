@@ -15,7 +15,7 @@ import "RoiHitTest.js" as RoiHitTest
     applications can update their own model.
 */
 
-Item {
+BaseHandles {
     id: root
 
     enum HandleMode {
@@ -75,44 +75,14 @@ Item {
     readonly property real dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
 
     /*!
-        Must be assigned the data transform of the graph area this handle item is paired to.
-
-        \sa GraphArea::dataTransform
-    */
-    required property matrix4x4 dataTransform
-    /*!
-        The normal handle fill color.
-    */
-    property color handleFillColor: "white"
-    /*!
-        The handle fill color used while hovered.
-    */
-    property color handleHoverFillColor: "#fff6bf"
-    /*!
         Which built-in handles should be shown.
     */
     property int handleMode: EllipseHandles.Cardinal
     /*!
-        The handle fill color used while selected or dragged.
-    */
-    property color handleSelectedFillColor: "#ffd24d"
-    /*!
         The visual size and hit target size of cardinal resize handles.
     */
     property real handleSize: 8
-    /*!
-        The handle outline color.
-    */
-    property color handleStrokeColor: "#333333"
-    /*!
-        The handle outline width.
-    */
-    property real handleStrokeWidth: 1
     readonly property var handles: [leftGraphHandle, rightGraphHandle, topGraphHandle, bottomGraphHandle, centerGraphHandle]
-    /*!
-        Whether handles should be visible.
-    */
-    property bool handlesVisible: selected
 
     /*!
         A direct reference to the left resize handle.
@@ -142,23 +112,11 @@ Item {
     readonly property alias rightHandle: rightGraphHandle
     readonly property point rightHandlePoint: Qt.point(dataRight, centerPoint.y)
     /*!
-        Whether pressing the ellipse or handles should emit \l selectionRequested.
-    */
-    property bool selectable: true
-    /*!
-        Whether the handle item should be drawn in the selected state.
-    */
-    property bool selected: false
-    /*!
         A direct reference to the top resize handle.
     */
     readonly property alias topHandle: topGraphHandle
     readonly property point topHandlePoint: Qt.point(centerPoint.x, dataTop)
 
-    /*!
-        Emitted when \a handle has moved to \a position in data coordinates.
-    */
-    signal handleMoved(GraphHandle handle, point position)
     /*!
         Emitted when the ellipse body has moved by \a delta in data coordinates.
     */
@@ -167,11 +125,6 @@ Item {
         Emitted when a handle has resized the ellipse to \a dataRect.
     */
     signal resized(rect dataRect)
-
-    /*!
-        Emitted when the handle item requests selection.
-    */
-    signal selectionRequested
 
     function bodyScenePoint(localPoint) {
         return Qt.point(bodyMouseArea.x + localPoint.x, bodyMouseArea.y + localPoint.y);

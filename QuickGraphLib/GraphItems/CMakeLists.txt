@@ -6,6 +6,7 @@ set(QGL_GI_QML_FILES
     AxVLine.qml
     BarHorizontal.qml
     BarVertical.qml
+    BaseHandles.qml
     BasicLegend.qml
     GraphHandle.qml
     BoxPlotHorizontal.qml
