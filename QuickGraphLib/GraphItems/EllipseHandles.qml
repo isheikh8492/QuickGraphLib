@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import QtQuick
-import "RoiHitTest.js" as RoiHitTest
+import QuickGraphLib as QuickGraphLib
 
 /*!
     \qmltype EllipseHandles
@@ -135,7 +135,7 @@ BaseHandles {
     function containsBodyScenePoint(scenePoint) {
         let radiusX = Math.abs(root.mappedRightHandle.x - root.mappedCenter.x);
         let radiusY = Math.abs(root.mappedTopHandle.y - root.mappedCenter.y);
-        return RoiHitTest.isInsideEllipse(scenePoint, root.mappedCenter, radiusX, radiusY);
+        return QuickGraphLib.Helpers.isInsideEllipse(scenePoint, root.mappedCenter, radiusX, radiusY);
     }
     function normalizedRect(left, top, right, bottom) {
         let normalizedLeft = Math.min(left, right);

@@ -1,0 +1,70 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 Refeyn Ltd and other QuickGraphLib contributors
+# SPDX-License-Identifier: MIT
+
+from PySide6 import QtCore, QtGui
+import pytest
+
+import QuickGraphLib
+
+
+def polygon(points: list[tuple[float, float]]) -> QtGui.QPolygonF:
+    return QtGui.QPolygonF([QtCore.QPointF(x, y) for x, y in points])
+
+
+def test_distance_to_segment_projects_to_nearest_point() -> None:
+    assert QuickGraphLib.Helpers.distanceToSegment(
+        QtCore.QPointF(5, 3),
+        QtCore.QPointF(0, 0),
+        QtCore.QPointF(10, 0),
+    ) == pytest.approx(3)
+    assert QuickGraphLib.Helpers.distanceToSegment(
+        QtCore.QPointF(4, 5),
+        QtCore.QPointF(1, 1),
+        QtCore.QPointF(1, 1),
+    ) == pytest.approx(5)
+
+
+def test_is_near_segment_uses_half_hit_width() -> None:
+    assert QuickGraphLib.Helpers.isNearSegment(
+        QtCore.QPointF(5, 4),
+        QtCore.QPointF(0, 0),
+        QtCore.QPointF(10, 0),
+        8,
+    )
+    assert not QuickGraphLib.Helpers.isNearSegment(
+        QtCore.QPointF(5, 4.1),
+        QtCore.QPointF(0, 0),
+        QtCore.QPointF(10, 0),
+        8,
+    )
+
+
+def test_is_near_polyline_checks_open_and_closed_segments() -> None:
+    points = polygon([(0, 0), (10, 0), (10, 10)])
+
+    assert QuickGraphLib.Helpers.isNearPolyline(QtCore.QPointF(5, 3), points, 8, False)
+    assert not QuickGraphLib.Helpers.isNearPolyline(
+        QtCore.QPointF(5, 5), points, 4, False
+    )
+    assert QuickGraphLib.Helpers.isNearPolyline(QtCore.QPointF(5, 5), points, 4, True)
+
+
+def test_is_inside_polygon_uses_odd_even_fill() -> None:
+    triangle = polygon([(1, 1), (5, 5), (9, 1)])
+
+    assert QuickGraphLib.Helpers.isInsidePolygon(QtCore.QPointF(5, 3), triangle)
+    assert not QuickGraphLib.Helpers.isInsidePolygon(QtCore.QPointF(5, 0.5), triangle)
+    assert not QuickGraphLib.Helpers.isInsidePolygon(
+        QtCore.QPointF(5, 3), polygon([(0, 0), (1, 1)])
+    )
+
+
+def test_is_inside_ellipse_rejects_invalid_radii() -> None:
+    center = QtCore.QPointF(5, 4)
+
+    assert QuickGraphLib.Helpers.isInsideEllipse(QtCore.QPointF(5, 4), center, 3, 2)
+    assert QuickGraphLib.Helpers.isInsideEllipse(QtCore.QPointF(8, 4), center, 3, 2)
+    assert not QuickGraphLib.Helpers.isInsideEllipse(
+        QtCore.QPointF(8.1, 4), center, 3, 2
+    )
+    assert not QuickGraphLib.Helpers.isInsideEllipse(QtCore.QPointF(5, 4), center, 0, 2)

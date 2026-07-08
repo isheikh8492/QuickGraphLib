@@ -30,7 +30,6 @@ set(QGL_GI_QML_FILES
     PolylineHandles.qml
     Rectangle.qml
     RectangleHandles.qml
-    RoiHitTest.js
     ColorMesh.qml
 )
 qt_add_qml_module(QuickGraphLibGraphItems

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import QtQuick
-import "RoiHitTest.js" as RoiHitTest
+import QuickGraphLib as QuickGraphLib
 
 /*!
     \qmltype LineSegmentHandles
@@ -118,7 +118,7 @@ BaseHandles {
         return containsBodyScenePoint(bodyScenePoint(localPoint));
     }
     function containsBodyScenePoint(scenePoint) {
-        return RoiHitTest.isNearSegment(scenePoint, mappedPoint1, mappedPoint2, hitWidth);
+        return QuickGraphLib.Helpers.isNearSegment(scenePoint, mappedPoint1, mappedPoint2, hitWidth);
     }
 
     height: parent ? parent.height : 0

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import QtQuick
-import "RoiHitTest.js" as RoiHitTest
+import QuickGraphLib as QuickGraphLib
 
 /*!
     \qmltype PolylineHandles
@@ -81,7 +81,7 @@ BaseHandles {
         return containsBodyScenePoint(bodyScenePoint(localPoint));
     }
     function containsBodyScenePoint(scenePoint) {
-        return RoiHitTest.isNearPolyline(scenePoint, mappedPoints, hitWidth, false);
+        return QuickGraphLib.Helpers.isNearPolyline(scenePoint, mappedPoints, hitWidth, false);
     }
     function handleIndex(handle) {
         return parseInt(handle.name.slice(5));

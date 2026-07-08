@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import QtQuick
-import "RoiHitTest.js" as RoiHitTest
+import QuickGraphLib as QuickGraphLib
 
 /*!
     \qmltype RectangleHandles
@@ -134,7 +134,7 @@ BaseHandles {
         return containsBodyScenePoint(bodyScenePoint(localPoint));
     }
     function containsBodyScenePoint(scenePoint) {
-        return RoiHitTest.isInsidePolygon(scenePoint, [mappedTopLeft, mappedTopRight, mappedBottomRight, mappedBottomLeft]);
+        return QuickGraphLib.Helpers.isInsidePolygon(scenePoint, [mappedTopLeft, mappedTopRight, mappedBottomRight, mappedBottomLeft]);
     }
     function normalizedRect(point1, point2) {
         let left = Math.min(point1.x, point2.x);
