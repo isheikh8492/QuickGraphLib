@@ -38,10 +38,10 @@ QGLPreFabs.XYAxes {
         strokeColor: "black"
         strokeWidth: 1
     }
-    QGLGraphItems.EllipseRoi {
+    QGLGraphItems.EllipseHandles {
         dataRect: axes.editableEllipseRect
         dataTransform: axes.dataTransform
-        handleMode: QGLGraphItems.EllipseRoi.Cardinal
+        handleMode: QGLGraphItems.EllipseHandles.Cardinal
         movable: true
         selectable: true
         selected: axes.ellipseSelected

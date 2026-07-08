@@ -38,10 +38,10 @@ QGLPreFabs.XYAxes {
         strokeColor: "black"
         strokeWidth: 1
     }
-    QGLGraphItems.RectangleRoi {
+    QGLGraphItems.RectangleHandles {
         dataRect: axes.editableRect
         dataTransform: axes.dataTransform
-        handleMode: QGLGraphItems.RectangleRoi.Corners
+        handleMode: QGLGraphItems.RectangleHandles.Corners
         movable: true
         selectable: true
         selected: axes.rectangleSelected

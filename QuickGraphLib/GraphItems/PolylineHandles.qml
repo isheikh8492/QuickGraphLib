@@ -5,12 +5,12 @@ import QtQuick
 import "RoiHitTest.js" as RoiHitTest
 
 /*!
-    \qmltype PolylineRoi
+    \qmltype PolylineHandles
     \inqmlmodule QuickGraphLib.GraphItems
     \inherits QtQuick::Item
     \brief Interaction overlay for an open polyline region of interest.
 
-    PolylineRoi provides selection, body dragging and vertex handles for a list of points. It does
+    PolylineHandles provides selection, body dragging and vertex handles for a list of points. It does
     not own the point data; instead it emits movement signals so applications can update their own
     model.
 */
@@ -22,7 +22,7 @@ Item {
     property bool _bodyHovered: false
     property point _lastDragPoint: Qt.point(0, 0)
     /*!
-        Must be assigned the data transform of the graph area this ROI is paired to.
+        Must be assigned the data transform of the graph area this handle item is paired to.
 
         \sa GraphArea::dataTransform
     */
@@ -56,7 +56,7 @@ Item {
     */
     property real handleStrokeWidth: 1
     /*!
-        GraphHandle objects rendered by this ROI.
+        GraphHandle objects rendered by this item.
     */
     readonly property var handles: vertexHandleRepeater.items
     /*!
@@ -85,7 +85,7 @@ Item {
     */
     property bool selectable: true
     /*!
-        Whether the ROI should be drawn in the selected state.
+        Whether the handle item should be drawn in the selected state.
     */
     property bool selected: false
     /*!
@@ -117,7 +117,7 @@ Item {
     signal pointMoved(int index, point position)
 
     /*!
-        Emitted when the ROI requests selection.
+        Emitted when the handle item requests selection.
     */
     signal selectionRequested
 

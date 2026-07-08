@@ -5,12 +5,12 @@ import QtQuick
 import "RoiHitTest.js" as RoiHitTest
 
 /*!
-    \qmltype EllipseRoi
+    \qmltype EllipseHandles
     \inqmlmodule QuickGraphLib.GraphItems
     \inherits QtQuick::Item
     \brief Interaction overlay for an elliptical region of interest.
 
-    EllipseRoi provides selection, body dragging and optional cardinal resize handles for an
+    EllipseHandles provides selection, body dragging and optional cardinal resize handles for an
     ellipse. It does not own the ellipse data; instead it emits movement and resize signals so
     applications can update their own model.
 */
@@ -75,7 +75,7 @@ Item {
     readonly property real dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
 
     /*!
-        Must be assigned the data transform of the graph area this ROI is paired to.
+        Must be assigned the data transform of the graph area this handle item is paired to.
 
         \sa GraphArea::dataTransform
     */
@@ -91,7 +91,7 @@ Item {
     /*!
         Which built-in handles should be shown.
     */
-    property int handleMode: EllipseRoi.Cardinal
+    property int handleMode: EllipseHandles.Cardinal
     /*!
         The handle fill color used while selected or dragged.
     */
@@ -146,7 +146,7 @@ Item {
     */
     property bool selectable: true
     /*!
-        Whether the ROI should be drawn in the selected state.
+        Whether the handle item should be drawn in the selected state.
     */
     property bool selected: false
     /*!
@@ -169,7 +169,7 @@ Item {
     signal resized(rect dataRect)
 
     /*!
-        Emitted when the ROI requests selection.
+        Emitted when the handle item requests selection.
     */
     signal selectionRequested
 
@@ -279,7 +279,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== EllipseRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -307,7 +307,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== EllipseRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -335,7 +335,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== EllipseRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -363,7 +363,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== EllipseRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -391,7 +391,7 @@ Item {
         size: root.centerHandleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode === EllipseRoi.CardinalAndCenter
+        visible: root.handlesVisible && root.handleMode === EllipseHandles.CardinalAndCenter
         z: 10
 
         onMoved: position => {

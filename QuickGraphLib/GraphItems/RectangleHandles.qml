@@ -5,12 +5,12 @@ import QtQuick
 import "RoiHitTest.js" as RoiHitTest
 
 /*!
-    \qmltype RectangleRoi
+    \qmltype RectangleHandles
     \inqmlmodule QuickGraphLib.GraphItems
     \inherits QtQuick::Item
     \brief Interaction overlay for a rectangular region of interest.
 
-    RectangleRoi provides selection, body dragging and optional corner handles for a rectangle.
+    RectangleHandles provides selection, body dragging and optional corner handles for a rectangle.
     It does not own the rectangle data; instead it emits movement and resize signals so
     applications can update their own model.
 */
@@ -78,7 +78,7 @@ Item {
     readonly property real dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
 
     /*!
-        Must be assigned the data transform of the graph area this ROI is paired to.
+        Must be assigned the data transform of the graph area this handle item is paired to.
 
         \sa GraphArea::dataTransform
     */
@@ -94,7 +94,7 @@ Item {
     /*!
         Which handles should be shown.
     */
-    property int handleMode: RectangleRoi.Corners
+    property int handleMode: RectangleHandles.Corners
     /*!
         The handle fill color used while selected or dragged.
     */
@@ -137,7 +137,7 @@ Item {
     */
     property bool selectable: true
     /*!
-        Whether the ROI should be drawn in the selected state.
+        Whether the handle item should be drawn in the selected state.
     */
     property bool selected: false
 
@@ -166,7 +166,7 @@ Item {
     signal resized(rect dataRect)
 
     /*!
-        Emitted when the ROI requests selection.
+        Emitted when the handle item requests selection.
     */
     signal selectionRequested
 
@@ -261,7 +261,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== RectangleHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -289,7 +289,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== RectangleHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -317,7 +317,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== RectangleHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -345,7 +345,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== RectangleRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== RectangleHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -373,7 +373,7 @@ Item {
         size: root.centerHandleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode === RectangleRoi.CornersAndCenter
+        visible: root.handlesVisible && root.handleMode === RectangleHandles.CornersAndCenter
         z: 10
 
         onMoved: position => {

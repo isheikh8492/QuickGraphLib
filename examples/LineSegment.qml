@@ -41,9 +41,9 @@ QGLPreFabs.XYAxes {
         strokeColor: "black"
         strokeWidth: 1
     }
-    QGLGraphItems.LineSegmentRoi {
+    QGLGraphItems.LineSegmentHandles {
         dataTransform: axes.dataTransform
-        handleMode: QGLGraphItems.LineSegmentRoi.Endpoints
+        handleMode: QGLGraphItems.LineSegmentHandles.Endpoints
         movable: true
         point1: axes.editablePoint1
         point2: axes.editablePoint2

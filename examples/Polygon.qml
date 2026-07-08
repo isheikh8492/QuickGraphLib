@@ -43,7 +43,7 @@ QGLPreFabs.XYAxes {
         strokeColor: "black"
         strokeWidth: 1
     }
-    QGLGraphItems.PolygonRoi {
+    QGLGraphItems.PolygonHandles {
         dataTransform: axes.dataTransform
         movable: true
         points: axes.editablePoints

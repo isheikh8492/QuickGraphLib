@@ -41,7 +41,7 @@ QGLPreFabs.XYAxes {
         strokeColor: "black"
         strokeWidth: 1
     }
-    QGLGraphItems.PolylineRoi {
+    QGLGraphItems.PolylineHandles {
         dataTransform: axes.dataTransform
         movable: true
         points: axes.editablePoints

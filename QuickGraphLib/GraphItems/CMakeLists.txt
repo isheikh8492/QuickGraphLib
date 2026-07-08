@@ -18,17 +18,17 @@ set(QGL_GI_QML_FILES
     BasicLegendItem.qml
     Contour.qml
     Ellipse.qml
-    EllipseRoi.qml
+    EllipseHandles.qml
     Grid.qml
     Line.qml
-    LineSegmentRoi.qml
+    LineSegmentHandles.qml
     LineSegment.qml
     Polygon.qml
-    PolygonRoi.qml
+    PolygonHandles.qml
     Polyline.qml
-    PolylineRoi.qml
+    PolylineHandles.qml
     Rectangle.qml
-    RectangleRoi.qml
+    RectangleHandles.qml
     RoiHitTest.js
     ColorMesh.qml
 )

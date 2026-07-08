@@ -30,7 +30,7 @@ QGLPreFabs.XYAxes {
     height: 600
     viewRect: Qt.rect(0, 0, 10, 10)
 
-    QGLGraphItems.LineSegmentRoi {
+    QGLGraphItems.LineSegmentHandles {
         id: lineRoi
 
         dataTransform: axes.dataTransform
@@ -38,28 +38,28 @@ QGLPreFabs.XYAxes {
         point2: Qt.point(9, 9)
         selected: true
     }
-    QGLGraphItems.PolylineRoi {
+    QGLGraphItems.PolylineHandles {
         id: polylineRoi
 
         dataTransform: axes.dataTransform
         points: [Qt.point(1, 1), Qt.point(5, 5), Qt.point(9, 1)]
         selected: true
     }
-    QGLGraphItems.PolygonRoi {
+    QGLGraphItems.PolygonHandles {
         id: polygonRoi
 
         dataTransform: axes.dataTransform
         points: [Qt.point(1, 1), Qt.point(5, 5), Qt.point(9, 1)]
         selected: true
     }
-    QGLGraphItems.EllipseRoi {
+    QGLGraphItems.EllipseHandles {
         id: ellipseRoi
 
         dataTransform: axes.dataTransform
         dataRect: Qt.rect(2, 2, 6, 4)
         selected: true
     }
-    QGLGraphItems.RectangleRoi {
+    QGLGraphItems.RectangleHandles {
         id: rectangleRoi
 
         dataTransform: axes.dataTransform
@@ -137,14 +137,14 @@ QGLPreFabs.XYAxes {
     height: 600
     viewRect: Qt.rect(0, 0, 10, 10)
 
-    QGLGraphItems.RectangleRoi {
+    QGLGraphItems.RectangleHandles {
         id: rectangleRoi
 
         dataTransform: axes.dataTransform
         dataRect: Qt.rect(2, 2, 6, 4)
         selected: true
     }
-    QGLGraphItems.EllipseRoi {
+    QGLGraphItems.EllipseHandles {
         id: ellipseRoi
 
         dataTransform: axes.dataTransform
@@ -231,7 +231,7 @@ QGLPreFabs.XYAxes {
     height: 600
     viewRect: Qt.rect(0, 0, 10, 10)
 
-    QGLGraphItems.LineSegmentRoi {
+    QGLGraphItems.LineSegmentHandles {
         id: lineRoi
 
         dataTransform: axes.dataTransform
@@ -239,34 +239,34 @@ QGLPreFabs.XYAxes {
         point2: Qt.point(9, 9)
         selected: true
     }
-    QGLGraphItems.PolylineRoi {
+    QGLGraphItems.PolylineHandles {
         id: polylineRoi
 
         dataTransform: axes.dataTransform
         points: [Qt.point(1, 1), Qt.point(5, 5), Qt.point(9, 1)]
         selected: true
     }
-    QGLGraphItems.PolygonRoi {
+    QGLGraphItems.PolygonHandles {
         id: polygonRoi
 
         dataTransform: axes.dataTransform
         points: [Qt.point(1, 1), Qt.point(5, 5), Qt.point(9, 1)]
         selected: true
     }
-    QGLGraphItems.RectangleRoi {
+    QGLGraphItems.RectangleHandles {
         id: rectangleRoi
 
         dataTransform: axes.dataTransform
         dataRect: Qt.rect(2, 2, 6, 4)
-        handleMode: QGLGraphItems.RectangleRoi.CornersAndCenter
+        handleMode: QGLGraphItems.RectangleHandles.CornersAndCenter
         selected: true
     }
-    QGLGraphItems.EllipseRoi {
+    QGLGraphItems.EllipseHandles {
         id: ellipseRoi
 
         dataTransform: axes.dataTransform
         dataRect: Qt.rect(2, 2, 6, 4)
-        handleMode: QGLGraphItems.EllipseRoi.CardinalAndCenter
+        handleMode: QGLGraphItems.EllipseHandles.CardinalAndCenter
         selected: true
     }
 

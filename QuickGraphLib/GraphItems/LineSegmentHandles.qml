@@ -5,12 +5,12 @@ import QtQuick
 import "RoiHitTest.js" as RoiHitTest
 
 /*!
-    \qmltype LineSegmentRoi
+    \qmltype LineSegmentHandles
     \inqmlmodule QuickGraphLib.GraphItems
     \inherits QtQuick::Item
     \brief Interaction overlay for a line segment region of interest.
 
-    LineSegmentRoi provides selection, body dragging and optional handles for a line segment.
+    LineSegmentHandles provides selection, body dragging and optional handles for a line segment.
     It does not own the segment data; instead it emits movement signals so applications can update
     their own model.
 */
@@ -48,7 +48,7 @@ Item {
     readonly property point centerPoint: Qt.point((point1.x + point2.x) / 2, (point1.y + point2.y) / 2)
 
     /*!
-        Must be assigned the data transform of the graph area this ROI is paired to.
+        Must be assigned the data transform of the graph area this handle item is paired to.
 
         \sa GraphArea::dataTransform
     */
@@ -78,7 +78,7 @@ Item {
     /*!
         Which built-in handles should be shown.
     */
-    property int handleMode: LineSegmentRoi.Endpoints
+    property int handleMode: LineSegmentHandles.Endpoints
     /*!
         The handle fill color used while selected or dragged.
     */
@@ -132,7 +132,7 @@ Item {
     */
     property bool selectable: true
     /*!
-        Whether the ROI should be drawn in the selected state.
+        Whether the handle item should be drawn in the selected state.
     */
     property bool selected: false
 
@@ -154,7 +154,7 @@ Item {
     signal point2Moved(point position)
 
     /*!
-        Emitted when the ROI requests selection.
+        Emitted when the handle item requests selection.
     */
     signal selectionRequested
 
@@ -236,7 +236,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== LineSegmentRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== LineSegmentHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -264,7 +264,7 @@ Item {
         size: root.handleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode !== LineSegmentRoi.NoHandles
+        visible: root.handlesVisible && root.handleMode !== LineSegmentHandles.NoHandles
         z: 10
 
         onMoved: position => {
@@ -292,7 +292,7 @@ Item {
         size: root.centerHandleSize
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
-        visible: root.handlesVisible && root.handleMode === LineSegmentRoi.EndpointsAndCenter
+        visible: root.handlesVisible && root.handleMode === LineSegmentHandles.EndpointsAndCenter
         z: 10
 
         onMoved: position => {
