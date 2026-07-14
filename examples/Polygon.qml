@@ -44,7 +44,6 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.PolygonHandles {
-        clickable: true
         dataTransform: axes.dataTransform
         movable: true
         points: axes.editablePoints

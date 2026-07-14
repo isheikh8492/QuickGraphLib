@@ -42,7 +42,6 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.PolylineHandles {
-        clickable: true
         dataTransform: axes.dataTransform
         movable: true
         points: axes.editablePoints

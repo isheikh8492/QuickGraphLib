@@ -176,7 +176,7 @@ BaseHandles {
         property real bodyTop: Math.min(root.mappedTopHandle.y, root.mappedBottomHandle.y)
 
         cursorShape: root.movable && (root._bodyHovered || root._bodyDragging) ? Qt.SizeAllCursor : Qt.ArrowCursor
-        enabled: root.clickable || root.movable
+        enabled: root.enabled
         height: bodyBottom - bodyTop
         hoverEnabled: true
         width: bodyRight - bodyLeft
@@ -205,8 +205,7 @@ BaseHandles {
                 return;
             }
             root._bodyDragging = true;
-            if (root.clickable)
-                root.clicked();
+            root.clicked();
             root._lastDragPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
         }
         onReleased: {
@@ -216,7 +215,6 @@ BaseHandles {
     GraphHandle {
         id: leftGraphHandle
 
-        clickable: root.clickable
         cursorShape: Qt.SizeHorCursor
         dataTransform: root.dataTransform
         delegate: root.cardinalHandleDelegate
@@ -244,7 +242,6 @@ BaseHandles {
     GraphHandle {
         id: rightGraphHandle
 
-        clickable: root.clickable
         cursorShape: Qt.SizeHorCursor
         dataTransform: root.dataTransform
         delegate: root.cardinalHandleDelegate
@@ -272,7 +269,6 @@ BaseHandles {
     GraphHandle {
         id: topGraphHandle
 
-        clickable: root.clickable
         cursorShape: Qt.SizeVerCursor
         dataTransform: root.dataTransform
         delegate: root.cardinalHandleDelegate
@@ -300,7 +296,6 @@ BaseHandles {
     GraphHandle {
         id: bottomGraphHandle
 
-        clickable: root.clickable
         cursorShape: Qt.SizeVerCursor
         dataTransform: root.dataTransform
         delegate: root.cardinalHandleDelegate
@@ -328,7 +323,6 @@ BaseHandles {
     GraphHandle {
         id: centerGraphHandle
 
-        clickable: root.clickable
         cursorShape: Qt.SizeAllCursor
         dataTransform: root.dataTransform
         delegate: root.centerHandleDelegate

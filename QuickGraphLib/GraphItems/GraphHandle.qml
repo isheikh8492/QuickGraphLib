@@ -29,10 +29,6 @@ Item {
 
     property point _pressOffset: Qt.point(0, 0)
     /*!
-        Whether pressing the handle should emit \l clicked.
-    */
-    property bool clickable: true
-    /*!
         The mouse cursor shown while hovering the handle.
     */
     property int cursorShape: Qt.SizeAllCursor
@@ -164,8 +160,7 @@ Item {
         onPressed: event => {
             root._pressOffset = Qt.point(event.x - root.width / 2, event.y - root.height / 2);
             root.dragging = true;
-            if (root.clickable)
-                root.clicked();
+            root.clicked();
         }
         onReleased: event => {
             root.dragging = false;

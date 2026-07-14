@@ -39,7 +39,6 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.RectangleHandles {
-        clickable: true
         dataRect: axes.editableRect
         dataTransform: axes.dataTransform
         handleMode: QGLGraphItems.RectangleHandles.Corners

@@ -42,7 +42,6 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.LineSegmentHandles {
-        clickable: true
         dataTransform: axes.dataTransform
         handleMode: QGLGraphItems.LineSegmentHandles.Endpoints
         movable: true

@@ -106,7 +106,6 @@ BaseHandles {
 
             required property int index
 
-            clickable: root.clickable
             cursorShape: Qt.PointingHandCursor
             dataTransform: root.dataTransform
             delegate: root.vertexHandleDelegate
@@ -137,7 +136,7 @@ BaseHandles {
         id: bodyMouseArea
 
         cursorShape: root.movable && (root._bodyHovered || root._bodyDragging) ? Qt.SizeAllCursor : Qt.ArrowCursor
-        enabled: root.points.length > 0 && (root.clickable || root.movable)
+        enabled: root.points.length > 0 && root.enabled
         height: Math.max(root.mappedBottom - root.mappedTop + root.hitPadding * 2, root.hitPadding * 2)
         hoverEnabled: true
         width: Math.max(root.mappedRight - root.mappedLeft + root.hitPadding * 2, root.hitPadding * 2)
@@ -166,8 +165,7 @@ BaseHandles {
                 return;
             }
             root._bodyDragging = true;
-            if (root.clickable)
-                root.clicked();
+            root.clicked();
             root._lastDragPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
         }
         onReleased: {

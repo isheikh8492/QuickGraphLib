@@ -39,7 +39,6 @@ QGLPreFabs.XYAxes {
         strokeWidth: 1
     }
     QGLGraphItems.EllipseHandles {
-        clickable: true
         dataRect: axes.editableEllipseRect
         dataTransform: axes.dataTransform
         handleMode: QGLGraphItems.EllipseHandles.Cardinal

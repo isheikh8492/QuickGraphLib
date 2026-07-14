@@ -19,11 +19,6 @@ Item {
     id: root
 
     /*!
-        Whether pressing the item or handles should emit \l clicked.
-    */
-    property bool clickable: true
-
-    /*!
         Must be assigned the data transform of the graph area this handle item is paired to.
 
         \sa GraphArea::dataTransform
