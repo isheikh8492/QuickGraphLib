@@ -44,8 +44,6 @@ QQS.ShapePath {
 
     fillColor: "transparent"
     pathHints: QQS.ShapePath.PathConvex | QQS.ShapePath.PathSolid
-    startX: mappedCenter.x + radiusX
-    startY: mappedCenter.y
 
     PathAngleArc {
         centerX: root.mappedCenter.x
