@@ -41,6 +41,20 @@ QGLPreFabs.XYAxes {
             assertBodyOrigin(ellipseRoi, Qt.point(Math.min(ellipseRoi.mappedLeftHandle.x, ellipseRoi.mappedRightHandle.x), Math.min(ellipseRoi.mappedTopHandle.y, ellipseRoi.mappedBottomHandle.y)), "ellipse body local origin mismatch");
             assertBodyOrigin(rectangleRoi, Qt.point(Math.min(rectangleRoi.mappedTopLeft.x, rectangleRoi.mappedTopRight.x, rectangleRoi.mappedBottomLeft.x, rectangleRoi.mappedBottomRight.x), Math.min(rectangleRoi.mappedTopLeft.y, rectangleRoi.mappedTopRight.y, rectangleRoi.mappedBottomLeft.y, rectangleRoi.mappedBottomRight.y)), "rectangle body local origin mismatch");
 
+            let expectedPolygonPoints = polygonRoi.points.map(point => axes.dataTransform.map(point));
+            if (polygonRoi.mappedPoints.length !== expectedPolygonPoints.length) {
+                throw new Error("polygon mapped point count mismatch");
+            }
+            for (let index = 0; index < expectedPolygonPoints.length; ++index) {
+                assertPointClose(polygonRoi.mappedPoints[index], expectedPolygonPoints[index], "polygon mapped point mismatch at index " + index);
+                assertPointClose(polygonRoi.handles[index].mappedPosition, expectedPolygonPoints[index], "polygon handle position mismatch at index " + index);
+            }
+            let polygonMappedXs = polygonRoi.mappedPoints.map(point => point.x);
+            let polygonMappedYs = polygonRoi.mappedPoints.map(point => point.y);
+            if (polygonRoi.mappedLeft !== Math.min(...polygonMappedXs) || polygonRoi.mappedRight !== Math.max(...polygonMappedXs) || polygonRoi.mappedTop !== Math.min(...polygonMappedYs) || polygonRoi.mappedBottom !== Math.max(...polygonMappedYs)) {
+                throw new Error("polygon mapped bounds mismatch");
+            }
+
             if (!lineRoi.containsBodyScenePoint(axes.dataTransform.map(Qt.point(5, 5)))) {
                 throw new Error("line inside point missed");
             }

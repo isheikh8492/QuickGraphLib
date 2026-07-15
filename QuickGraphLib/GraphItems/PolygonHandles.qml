@@ -39,7 +39,7 @@ BaseHandles {
     property real hitPadding: 8
     readonly property real mappedBottom: mappedPoints.length === 0 ? 0 : Math.max(...mappedPoints.map(point => point.y))
     readonly property real mappedLeft: mappedPoints.length === 0 ? 0 : Math.min(...mappedPoints.map(point => point.x))
-    readonly property var mappedPoints: points.map(point => dataTransform.map(point))
+    readonly property var mappedPoints: QuickGraphLib.Helpers.mapPoints(points, root.dataTransform)
     readonly property real mappedRight: mappedPoints.length === 0 ? 0 : Math.max(...mappedPoints.map(point => point.x))
     readonly property real mappedTop: mappedPoints.length === 0 ? 0 : Math.min(...mappedPoints.map(point => point.y))
     /*!
