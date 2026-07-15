@@ -33,6 +33,7 @@ QQS.ShapePath {
         \sa GraphArea::dataTransform
     */
     required property matrix4x4 dataTransform
+    // Map corners independently so non-axis-aligned transforms preserve the rectangle geometry.
     readonly property point mappedBottomLeft: dataTransform.map(Qt.point(dataLeft, dataBottom))
     readonly property point mappedBottomRight: dataTransform.map(Qt.point(dataRight, dataBottom))
     readonly property point mappedTopLeft: dataTransform.map(Qt.point(dataLeft, dataTop))
