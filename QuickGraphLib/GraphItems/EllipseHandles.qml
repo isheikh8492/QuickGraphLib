@@ -231,7 +231,6 @@ BaseHandles {
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
-        z: 10
 
         onClicked: root.handleClicked(root.roi, root.shape, leftGraphHandle)
         onMoved: position => {
@@ -258,7 +257,6 @@ BaseHandles {
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
-        z: 10
 
         onClicked: root.handleClicked(root.roi, root.shape, rightGraphHandle)
         onMoved: position => {
@@ -285,7 +283,6 @@ BaseHandles {
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
-        z: 10
 
         onClicked: root.handleClicked(root.roi, root.shape, topGraphHandle)
         onMoved: position => {
@@ -312,7 +309,6 @@ BaseHandles {
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
-        z: 10
 
         onClicked: root.handleClicked(root.roi, root.shape, bottomGraphHandle)
         onMoved: position => {
@@ -339,7 +335,6 @@ BaseHandles {
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode === EllipseHandles.CardinalAndCenter
-        z: 10
 
         onClicked: root.handleClicked(root.roi, root.shape, centerGraphHandle)
         onMoved: position => {

@@ -123,7 +123,6 @@ BaseHandles {
             strokeColor: root.handleStrokeColor
             strokeWidth: root.handleStrokeWidth
             visible: root.handlesVisible
-            z: 10
 
             onClicked: root.handleClicked(root.roi, root.shape, vertexGraphHandle)
             onMoved: position => {

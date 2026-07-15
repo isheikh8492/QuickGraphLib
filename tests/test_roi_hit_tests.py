@@ -3,7 +3,7 @@
 
 from pathlib import Path
 
-from PySide6 import QtCore, QtGui, QtQml, QtQuick
+from PySide6 import QtCore, QtGui, QtQml, QtQuick, QtTest
 
 import QuickGraphLib
 
@@ -11,7 +11,7 @@ import QuickGraphLib
 _QML_TEST_DIR = Path(__file__).with_name("qml")
 
 
-def _run_qml_test(filename: str) -> None:
+def _run_qml_test(filename: str, interaction=None) -> None:
     QtQuick.QQuickWindow.setGraphicsApi(
         QtQuick.QSGRendererInterface.GraphicsApi.Software
     )
@@ -29,6 +29,8 @@ def _run_qml_test(filename: str) -> None:
 
     try:
         app.processEvents()
+        if interaction is not None:
+            interaction(item, app)
         assert item.property("completedSuccessfully"), item.property("failureMessage")
     finally:
         item.deleteLater()
@@ -45,3 +47,28 @@ def test_axis_aligned_roi_resize_handles_clamp_at_opposite_anchor() -> None:
 
 def test_roi_handles_expose_role_specific_cursors() -> None:
     _run_qml_test("RoiHandleCursorTests.qml")
+
+
+def test_graph_handle_stacking_default_and_override() -> None:
+    def click_overlapping_handle(item, app) -> None:
+        window = QtQuick.QQuickWindow()
+        window.resize(100, 100)
+        item.setParentItem(window.contentItem())
+        window.show()
+        app.processEvents()
+
+        try:
+            QtTest.QTest.mouseClick(
+                window,
+                QtCore.Qt.MouseButton.LeftButton,
+                QtCore.Qt.KeyboardModifier.NoModifier,
+                QtCore.QPoint(25, 25),
+            )
+            app.processEvents()
+            assert item.property("handleClickCount") == 1
+            assert item.property("bodyPressCount") == 0
+        finally:
+            item.setParentItem(None)
+            window.close()
+
+    _run_qml_test("GraphHandleStackingTests.qml", click_overlapping_handle)

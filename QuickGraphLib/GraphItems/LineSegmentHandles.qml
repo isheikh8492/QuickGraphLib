@@ -188,7 +188,6 @@ BaseHandles {
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== LineSegmentHandles.NoHandles
-        z: 10
 
         onClicked: root.handleClicked(root.roi, root.shape, point1GraphHandle)
         onMoved: position => {
@@ -215,7 +214,6 @@ BaseHandles {
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== LineSegmentHandles.NoHandles
-        z: 10
 
         onClicked: root.handleClicked(root.roi, root.shape, point2GraphHandle)
         onMoved: position => {
@@ -242,7 +240,6 @@ BaseHandles {
         strokeColor: root.handleStrokeColor
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode === LineSegmentHandles.EndpointsAndCenter
-        z: 10
 
         onClicked: root.handleClicked(root.roi, root.shape, centerGraphHandle)
         onMoved: position => {

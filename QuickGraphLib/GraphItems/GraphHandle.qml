@@ -122,6 +122,7 @@ Item {
     width: hitSize
     x: mappedPosition.x - width / 2
     y: mappedPosition.y - height / 2
+    z: 10
 
     Rectangle {
         anchors.centerIn: parent
