@@ -35,6 +35,8 @@ QGLPreFabs.XYAxes {
         strokeWidth: 2
     }
     QGLGraphItems.LineSegment {
+        id: editableLineSegment
+
         dataTransform: axes.dataTransform
         point1: axes.editablePoint1
         point2: axes.editablePoint2
@@ -48,8 +50,10 @@ QGLPreFabs.XYAxes {
         point1: axes.editablePoint1
         point2: axes.editablePoint2
         selected: axes.lineSegmentSelected
+        shape: editableLineSegment
 
-        onClicked: axes.lineSegmentSelected = true
+        onBodyClicked: axes.lineSegmentSelected = true
+        onHandleClicked: axes.lineSegmentSelected = true
         onMoved: delta => axes.moveEditableLineSegment(delta)
         onPoint1Moved: position => axes.editablePoint1 = position
         onPoint2Moved: position => axes.editablePoint2 = position

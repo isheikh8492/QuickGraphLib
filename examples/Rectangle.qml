@@ -32,6 +32,8 @@ QGLPreFabs.XYAxes {
         strokeWidth: 3
     }
     QGLGraphItems.Rectangle {
+        id: editableRectangle
+
         dataRect: axes.editableRect
         dataTransform: axes.dataTransform
         fillColor: "transparent"
@@ -44,8 +46,10 @@ QGLPreFabs.XYAxes {
         handleMode: QGLGraphItems.RectangleHandles.Corners
         movable: true
         selected: axes.rectangleSelected
+        shape: editableRectangle
 
-        onClicked: axes.rectangleSelected = true
+        onBodyClicked: axes.rectangleSelected = true
+        onHandleClicked: axes.rectangleSelected = true
         onMoved: delta => axes.moveEditableRectangle(delta)
         onResized: dataRect => axes.editableRect = dataRect
     }

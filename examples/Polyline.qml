@@ -36,6 +36,8 @@ QGLPreFabs.XYAxes {
         strokeWidth: 3
     }
     QGLGraphItems.Polyline {
+        id: editablePolyline
+
         dataTransform: axes.dataTransform
         points: axes.editablePoints
         strokeColor: "black"
@@ -46,8 +48,10 @@ QGLPreFabs.XYAxes {
         movable: true
         points: axes.editablePoints
         selected: axes.polylineSelected
+        shape: editablePolyline
 
-        onClicked: axes.polylineSelected = true
+        onBodyClicked: axes.polylineSelected = true
+        onHandleClicked: axes.polylineSelected = true
         onMoved: delta => axes.moveEditablePolyline(delta)
         onPointMoved: (index, position) => axes.moveEditablePoint(index, position)
     }

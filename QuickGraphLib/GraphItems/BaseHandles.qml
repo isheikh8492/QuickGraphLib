@@ -49,14 +49,31 @@ Item {
     */
     property bool handlesVisible: selected
     /*!
+        The application ROI or gate model associated with this handle overlay.
+
+        The handle overlay does not take ownership of this object.
+    */
+    property QtObject roi: null
+    /*!
         Whether the handle item should be drawn in the selected state.
     */
     property bool selected: false
+    /*!
+        The rendered graph item associated with this handle overlay.
+
+        The handle overlay does not take ownership of this item.
+    */
+    property Item shape: null
 
     /*!
-        Emitted when the handle item is clicked.
+        Emitted with the associated \a roi and \a shape when the body of the handle item is clicked.
     */
-    signal clicked
+    signal bodyClicked(QtObject roi, Item shape)
+
+    /*!
+        Emitted with the associated \a roi and \a shape when \a handle is clicked.
+    */
+    signal handleClicked(QtObject roi, Item shape, GraphHandle handle)
 
     /*!
         Emitted when \a handle has moved to \a position in data coordinates.

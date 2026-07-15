@@ -37,6 +37,8 @@ QGLPreFabs.XYAxes {
         strokeWidth: 3
     }
     QGLGraphItems.Polygon {
+        id: editablePolygon
+
         dataTransform: axes.dataTransform
         fillColor: "transparent"
         points: axes.editablePoints
@@ -48,8 +50,10 @@ QGLPreFabs.XYAxes {
         movable: true
         points: axes.editablePoints
         selected: axes.polygonSelected
+        shape: editablePolygon
 
-        onClicked: axes.polygonSelected = true
+        onBodyClicked: axes.polygonSelected = true
+        onHandleClicked: axes.polygonSelected = true
         onMoved: delta => axes.moveEditablePolygon(delta)
         onPointMoved: (index, position) => axes.moveEditablePoint(index, position)
     }

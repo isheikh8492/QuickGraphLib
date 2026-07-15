@@ -189,7 +189,7 @@ BaseHandles {
             root.moved(delta);
         }
         onPressed: event => {
-            root.clicked();
+            root.bodyClicked(root.roi, root.shape);
             root._lastDragPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
         }
     }
@@ -214,7 +214,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== RectangleHandles.NoHandles
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, topLeftGraphHandle)
         onMoved: position => {
             root.handleMoved(topLeftGraphHandle, position);
             root.resized(root.resizedFromHandle(topLeftGraphHandle, position));
@@ -241,7 +241,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== RectangleHandles.NoHandles
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, topRightGraphHandle)
         onMoved: position => {
             root.handleMoved(topRightGraphHandle, position);
             root.resized(root.resizedFromHandle(topRightGraphHandle, position));
@@ -268,7 +268,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== RectangleHandles.NoHandles
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, bottomLeftGraphHandle)
         onMoved: position => {
             root.handleMoved(bottomLeftGraphHandle, position);
             root.resized(root.resizedFromHandle(bottomLeftGraphHandle, position));
@@ -295,7 +295,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== RectangleHandles.NoHandles
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, bottomRightGraphHandle)
         onMoved: position => {
             root.handleMoved(bottomRightGraphHandle, position);
             root.resized(root.resizedFromHandle(bottomRightGraphHandle, position));
@@ -322,7 +322,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode === RectangleHandles.CornersAndCenter
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, centerGraphHandle)
         onMoved: position => {
             root.handleMoved(centerGraphHandle, position);
             root.moved(Qt.point(position.x - centerGraphHandle.position.x, position.y - centerGraphHandle.position.y));

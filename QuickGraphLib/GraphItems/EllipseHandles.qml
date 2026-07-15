@@ -205,7 +205,7 @@ BaseHandles {
                 return;
             }
             root._bodyDragging = true;
-            root.clicked();
+            root.bodyClicked(root.roi, root.shape);
             root._lastDragPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
         }
         onReleased: {
@@ -233,7 +233,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, leftGraphHandle)
         onMoved: position => {
             root.handleMoved(leftGraphHandle, position);
             root.resized(root.resizedFromHandle(leftGraphHandle, position));
@@ -260,7 +260,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, rightGraphHandle)
         onMoved: position => {
             root.handleMoved(rightGraphHandle, position);
             root.resized(root.resizedFromHandle(rightGraphHandle, position));
@@ -287,7 +287,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, topGraphHandle)
         onMoved: position => {
             root.handleMoved(topGraphHandle, position);
             root.resized(root.resizedFromHandle(topGraphHandle, position));
@@ -314,7 +314,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, bottomGraphHandle)
         onMoved: position => {
             root.handleMoved(bottomGraphHandle, position);
             root.resized(root.resizedFromHandle(bottomGraphHandle, position));
@@ -341,7 +341,7 @@ BaseHandles {
         visible: root.handlesVisible && root.handleMode === EllipseHandles.CardinalAndCenter
         z: 10
 
-        onClicked: root.clicked()
+        onClicked: root.handleClicked(root.roi, root.shape, centerGraphHandle)
         onMoved: position => {
             root.handleMoved(centerGraphHandle, position);
             root.moved(Qt.point(position.x - centerGraphHandle.position.x, position.y - centerGraphHandle.position.y));
