@@ -199,6 +199,20 @@ QPolygonF Helpers::mapPoints(QVariant points, QMatrix4x4 dataTransform) {
 }
 
 /*!
+    \fn QRectF Helpers::boundingRect(QVariant points)
+
+    Returns the bounding rectangle of \a points.
+*/
+QRectF Helpers::boundingRect(QVariant points) {
+    /*!
+        \qmlmethod rect Helpers::boundingRect(var points)
+
+        Returns the bounding rectangle of \a points.
+    */
+    return pointsFromVariant(points, "Helpers::boundingRect").boundingRect();
+}
+
+/*!
     \fn qreal Helpers::distanceToSegment(QPointF point, QPointF segmentStart, QPointF segmentEnd)
 
     Returns the shortest distance from \a point to the line segment from \a segmentStart to \a segmentEnd.

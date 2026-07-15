@@ -59,6 +59,16 @@ def test_is_inside_polygon_uses_odd_even_fill() -> None:
     )
 
 
+def test_bounding_rect_handles_empty_single_and_multiple_points() -> None:
+    assert QuickGraphLib.Helpers.boundingRect(polygon([])) == QtCore.QRectF()
+    assert QuickGraphLib.Helpers.boundingRect(polygon([(3, 7)])) == QtCore.QRectF(
+        3, 7, 0, 0
+    )
+    assert QuickGraphLib.Helpers.boundingRect(
+        polygon([(1, 1), (5, 5), (9, 1)])
+    ) == QtCore.QRectF(1, 1, 8, 4)
+
+
 def test_is_inside_ellipse_rejects_invalid_radii() -> None:
     center = QtCore.QPointF(5, 4)
 

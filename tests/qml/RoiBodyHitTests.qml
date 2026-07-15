@@ -31,6 +31,11 @@ QGLPreFabs.XYAxes {
                 throw new Error(message);
             }
         }
+        function assertBounds(roi, left, top, right, bottom, message) {
+            if (roi.mappedLeft !== left || roi.mappedTop !== top || roi.mappedRight !== right || roi.mappedBottom !== bottom) {
+                throw new Error(message);
+            }
+        }
 
         try {
             let lineDx = Math.abs(lineRoi.mappedPoint2.x - lineRoi.mappedPoint1.x);
@@ -54,6 +59,10 @@ QGLPreFabs.XYAxes {
             if (polygonRoi.mappedLeft !== Math.min(...polygonMappedXs) || polygonRoi.mappedRight !== Math.max(...polygonMappedXs) || polygonRoi.mappedTop !== Math.min(...polygonMappedYs) || polygonRoi.mappedBottom !== Math.max(...polygonMappedYs)) {
                 throw new Error("polygon mapped bounds mismatch");
             }
+            assertBounds(emptyPolygonRoi, 0, 0, 0, 0, "empty polygon mapped bounds mismatch");
+            let singleMappedPoint = axes.dataTransform.map(singlePointPolygonRoi.points[0]);
+            assertBounds(singlePointPolygonRoi, singleMappedPoint.x, singleMappedPoint.y, singleMappedPoint.x, singleMappedPoint.y, "single-point polygon mapped bounds mismatch");
+            assertPointClose(singlePointPolygonRoi.handles[0].mappedPosition, singleMappedPoint, "single-point polygon handle position mismatch");
 
             if (!lineRoi.containsBodyScenePoint(axes.dataTransform.map(Qt.point(5, 5)))) {
                 throw new Error("line inside point missed");
@@ -125,6 +134,20 @@ QGLPreFabs.XYAxes {
 
         dataTransform: axes.dataTransform
         points: [Qt.point(1, 1), Qt.point(5, 5), Qt.point(9, 1)]
+        selected: true
+    }
+    QGLGraphItems.PolygonHandles {
+        id: emptyPolygonRoi
+
+        dataTransform: axes.dataTransform
+        points: []
+        selected: true
+    }
+    QGLGraphItems.PolygonHandles {
+        id: singlePointPolygonRoi
+
+        dataTransform: axes.dataTransform
+        points: [Qt.point(3, 7)]
         selected: true
     }
     QGLGraphItems.EllipseHandles {

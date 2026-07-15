@@ -21,6 +21,7 @@ BaseHandles {
     property bool _bodyDragging: false
     property bool _bodyHovered: false
     property point _lastDragPoint: Qt.point(0, 0)
+    readonly property rect _mappedRect: QuickGraphLib.Helpers.boundingRect(mappedPoints)
     /*!
         The mouse hit target size of vertex handles.
     */
@@ -37,11 +38,11 @@ BaseHandles {
         The body hit target padding in pixels.
     */
     property real hitPadding: 8
-    readonly property real mappedBottom: mappedPoints.length === 0 ? 0 : Math.max(...mappedPoints.map(point => point.y))
-    readonly property real mappedLeft: mappedPoints.length === 0 ? 0 : Math.min(...mappedPoints.map(point => point.x))
+    readonly property real mappedBottom: _mappedRect.bottom
+    readonly property real mappedLeft: _mappedRect.left
     readonly property var mappedPoints: QuickGraphLib.Helpers.mapPoints(points, root.dataTransform)
-    readonly property real mappedRight: mappedPoints.length === 0 ? 0 : Math.max(...mappedPoints.map(point => point.x))
-    readonly property real mappedTop: mappedPoints.length === 0 ? 0 : Math.min(...mappedPoints.map(point => point.y))
+    readonly property real mappedRight: _mappedRect.right
+    readonly property real mappedTop: _mappedRect.top
     /*!
         Whether dragging the polygon body should emit movement signals.
     */
