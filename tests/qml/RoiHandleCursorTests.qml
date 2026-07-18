@@ -11,6 +11,12 @@ QGLPreFabs.XYAxes {
     property bool completedSuccessfully: false
     property string failureMessage: ""
 
+    function assertHandleObjectName(handle, expected) {
+        if (handle.objectName !== expected) {
+            throw new Error("handle name mismatch: expected " + expected + ", got " + handle.objectName);
+        }
+    }
+
     height: 600
     viewRect: Qt.rect(0, 0, 10, 10)
     width: 800
@@ -43,6 +49,31 @@ QGLPreFabs.XYAxes {
             }
             if (polygonRoi.handles[0].cursorShape !== Qt.PointingHandCursor) {
                 throw new Error("polygon vertex cursor mismatch");
+            }
+            assertHandleObjectName(rectangleRoi.topLeftHandle, "topLeft");
+            assertHandleObjectName(rectangleRoi.topRightHandle, "topRight");
+            assertHandleObjectName(rectangleRoi.bottomLeftHandle, "bottomLeft");
+            assertHandleObjectName(rectangleRoi.bottomRightHandle, "bottomRight");
+            assertHandleObjectName(rectangleRoi.centerHandle, "center");
+            assertHandleObjectName(ellipseRoi.leftHandle, "left");
+            assertHandleObjectName(ellipseRoi.rightHandle, "right");
+            assertHandleObjectName(ellipseRoi.topHandle, "top");
+            assertHandleObjectName(ellipseRoi.bottomHandle, "bottom");
+            assertHandleObjectName(ellipseRoi.centerHandle, "center");
+            assertHandleObjectName(lineRoi.point1Handle, "point1");
+            assertHandleObjectName(lineRoi.point2Handle, "point2");
+            assertHandleObjectName(lineRoi.centerHandle, "center");
+            for (let index = 0; index < polylineRoi.handles.length; ++index) {
+                assertHandleObjectName(polylineRoi.handles[index], "point" + index);
+                if (polylineRoi.handleIndex(polylineRoi.handles[index]) !== index) {
+                    throw new Error("polyline handle index mismatch at " + index);
+                }
+            }
+            for (let index = 0; index < polygonRoi.handles.length; ++index) {
+                assertHandleObjectName(polygonRoi.handles[index], "point" + index);
+                if (polygonRoi.handleIndex(polygonRoi.handles[index]) !== index) {
+                    throw new Error("polygon handle index mismatch at " + index);
+                }
             }
             completedSuccessfully = true;
         } catch (error) {

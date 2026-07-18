@@ -144,16 +144,16 @@ BaseHandles {
         return Qt.rect(left, top, right - left, bottom - top);
     }
     function resizedFromHandle(handle, position) {
-        if (handle.name === "topLeft") {
+        if (handle.objectName === "topLeft") {
             return root.normalizedRect(root.clampedResizePoint(position, root.bottomRightPoint, -1, -1), root.bottomRightPoint);
         }
-        if (handle.name === "topRight") {
+        if (handle.objectName === "topRight") {
             return root.normalizedRect(root.clampedResizePoint(position, root.bottomLeftPoint, 1, -1), root.bottomLeftPoint);
         }
-        if (handle.name === "bottomLeft") {
+        if (handle.objectName === "bottomLeft") {
             return root.normalizedRect(root.clampedResizePoint(position, root.topRightPoint, -1, 1), root.topRightPoint);
         }
-        if (handle.name === "bottomRight") {
+        if (handle.objectName === "bottomRight") {
             return root.normalizedRect(root.clampedResizePoint(position, root.topLeftPoint, 1, 1), root.topLeftPoint);
         }
         return root.dataRect;
@@ -202,7 +202,7 @@ BaseHandles {
         fillColor: root.handleFillColor
         hoverFillColor: root.handleHoverFillColor
         movable: root.cornerHandlesMovable
-        name: "topLeft"
+        objectName: "topLeft"
         position: root.topLeftPoint
         role: GraphHandle.Resize
         selected: root.selected
@@ -228,7 +228,7 @@ BaseHandles {
         fillColor: root.handleFillColor
         hoverFillColor: root.handleHoverFillColor
         movable: root.cornerHandlesMovable
-        name: "topRight"
+        objectName: "topRight"
         position: root.topRightPoint
         role: GraphHandle.Resize
         selected: root.selected
@@ -254,7 +254,7 @@ BaseHandles {
         fillColor: root.handleFillColor
         hoverFillColor: root.handleHoverFillColor
         movable: root.cornerHandlesMovable
-        name: "bottomLeft"
+        objectName: "bottomLeft"
         position: root.bottomLeftPoint
         role: GraphHandle.Resize
         selected: root.selected
@@ -280,7 +280,7 @@ BaseHandles {
         fillColor: root.handleFillColor
         hoverFillColor: root.handleHoverFillColor
         movable: root.cornerHandlesMovable
-        name: "bottomRight"
+        objectName: "bottomRight"
         position: root.bottomRightPoint
         role: GraphHandle.Resize
         selected: root.selected
@@ -306,7 +306,7 @@ BaseHandles {
         fillColor: root.handleFillColor
         hoverFillColor: root.handleHoverFillColor
         movable: root.movable
-        name: "center"
+        objectName: "center"
         position: root.centerPoint
         role: GraphHandle.Move
         selected: root.selected

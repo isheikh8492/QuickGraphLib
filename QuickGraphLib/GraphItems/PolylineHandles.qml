@@ -84,7 +84,7 @@ BaseHandles {
         return QuickGraphLib.Helpers.isNearPolyline(scenePoint, mappedPoints, hitWidth, false);
     }
     function handleIndex(handle) {
-        return parseInt(handle.name.slice(5));
+        return parseInt(handle.objectName.slice(5));
     }
 
     height: parent ? parent.height : 0
@@ -113,7 +113,7 @@ BaseHandles {
             hitSize: root.handleHitSize
             hoverFillColor: root.handleHoverFillColor
             movable: root.vertexHandlesMovable
-            name: "point" + index
+            objectName: "point" + index
             position: root.points[index]
             role: GraphHandle.Resize
             selected: root.selected

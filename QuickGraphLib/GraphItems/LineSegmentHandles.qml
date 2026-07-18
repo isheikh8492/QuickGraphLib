@@ -178,7 +178,7 @@ BaseHandles {
         fillColor: root.handleFillColor
         hoverFillColor: root.handleHoverFillColor
         movable: root.endpointHandlesMovable
-        name: "point1"
+        objectName: "point1"
         position: root.point1
         role: GraphHandle.Resize
         selected: root.selected
@@ -204,7 +204,7 @@ BaseHandles {
         fillColor: root.handleFillColor
         hoverFillColor: root.handleHoverFillColor
         movable: root.endpointHandlesMovable
-        name: "point2"
+        objectName: "point2"
         position: root.point2
         role: GraphHandle.Resize
         selected: root.selected
@@ -230,7 +230,7 @@ BaseHandles {
         fillColor: root.handleFillColor
         hoverFillColor: root.handleHoverFillColor
         movable: root.movable
-        name: "center"
+        objectName: "center"
         position: root.centerPoint
         role: GraphHandle.Move
         selected: root.selected
