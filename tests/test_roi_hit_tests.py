@@ -72,3 +72,7 @@ def test_graph_handle_stacking_default_and_override() -> None:
             window.close()
 
     _run_qml_test("GraphHandleStackingTests.qml", click_overlapping_handle)
+
+
+def test_ellipse_geometry_across_data_rects_and_transforms() -> None:
+    _run_qml_test("EllipseGeometryTests.qml")

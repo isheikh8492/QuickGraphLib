@@ -213,6 +213,20 @@ QRectF Helpers::boundingRect(QVariant points) {
 }
 
 /*!
+    \fn QRectF Helpers::normalizedRect(QRectF rect)
+
+    Returns \a rect with non-negative width and height.
+*/
+QRectF Helpers::normalizedRect(QRectF rect) {
+    /*!
+        \qmlmethod rect Helpers::normalizedRect(rect rect)
+
+        Returns \a rect with non-negative width and height.
+    */
+    return rect.normalized();
+}
+
+/*!
     \fn qreal Helpers::distanceToSegment(QPointF point, QPointF segmentStart, QPointF segmentEnd)
 
     Returns the shortest distance from \a point to the line segment from \a segmentStart to \a segmentEnd.

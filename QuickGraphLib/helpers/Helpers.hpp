@@ -26,6 +26,7 @@ class QGL_EXPORT Helpers : public QObject {
     Q_INVOKABLE static QList<qreal> tickLocator(qreal min, qreal max, int maxNum);
     Q_INVOKABLE static QPolygonF mapPoints(QVariant points, QMatrix4x4 dataTransform);
     Q_INVOKABLE static QRectF boundingRect(QVariant points);
+    Q_INVOKABLE static QRectF normalizedRect(QRectF rect);
     Q_INVOKABLE static qreal distanceToSegment(QPointF point, QPointF segmentStart, QPointF segmentEnd);
     Q_INVOKABLE static bool isNearSegment(QPointF point, QPointF segmentStart, QPointF segmentEnd, qreal hitWidth);
     Q_INVOKABLE static bool isNearPolyline(QPointF point, QVariant points, qreal hitWidth, bool closed);

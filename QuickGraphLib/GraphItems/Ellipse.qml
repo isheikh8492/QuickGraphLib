@@ -3,6 +3,7 @@
 
 import QtQuick
 import QtQuick.Shapes as QQS
+import QuickGraphLib as QuickGraphLib
 
 /*!
     \qmltype Ellipse
@@ -18,16 +19,18 @@ import QtQuick.Shapes as QQS
 QQS.ShapePath {
     id: root
 
-    readonly property real dataBottom: Math.max(dataRect.y, dataRect.y + dataRect.height)
-    readonly property point dataCenter: Qt.point((dataLeft + dataRight) / 2, (dataTop + dataBottom) / 2)
-    readonly property real dataLeft: Math.min(dataRect.x, dataRect.x + dataRect.width)
+    readonly property rect _mappedRect: dataTransform.mapRect(_normalizedDataRect)
+    readonly property rect _normalizedDataRect: QuickGraphLib.Helpers.normalizedRect(dataRect)
+    readonly property real dataBottom: _normalizedDataRect.bottom
+    readonly property point dataCenter: Qt.point((_normalizedDataRect.left + _normalizedDataRect.right) / 2, (_normalizedDataRect.top + _normalizedDataRect.bottom) / 2)
+    readonly property real dataLeft: _normalizedDataRect.left
     /*!
         The ellipse bounding rectangle in data coordinates.
     */
     required property rect dataRect
-    readonly property real dataRight: Math.max(dataRect.x, dataRect.x + dataRect.width)
+    readonly property real dataRight: _normalizedDataRect.right
     readonly property point dataRightCenter: Qt.point(dataRight, dataCenter.y)
-    readonly property real dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
+    readonly property real dataTop: _normalizedDataRect.top
     readonly property point dataTopCenter: Qt.point(dataCenter.x, dataTop)
 
     /*!
@@ -39,8 +42,8 @@ QQS.ShapePath {
     readonly property point mappedCenter: dataTransform.map(dataCenter)
     readonly property point mappedRightCenter: dataTransform.map(dataRightCenter)
     readonly property point mappedTopCenter: dataTransform.map(dataTopCenter)
-    readonly property real radiusX: Math.abs(mappedRightCenter.x - mappedCenter.x)
-    readonly property real radiusY: Math.abs(mappedTopCenter.y - mappedCenter.y)
+    readonly property real radiusX: _mappedRect.width / 2
+    readonly property real radiusY: _mappedRect.height / 2
 
     fillColor: "transparent"
     pathHints: QQS.ShapePath.PathConvex | QQS.ShapePath.PathSolid

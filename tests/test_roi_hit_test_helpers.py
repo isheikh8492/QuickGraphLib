@@ -69,6 +69,18 @@ def test_bounding_rect_handles_empty_single_and_multiple_points() -> None:
     ) == QtCore.QRectF(1, 1, 8, 4)
 
 
+def test_normalized_rect_makes_dimensions_non_negative() -> None:
+    assert QuickGraphLib.Helpers.normalizedRect(
+        QtCore.QRectF(2, 3, 6, 4)
+    ) == QtCore.QRectF(2, 3, 6, 4)
+    assert QuickGraphLib.Helpers.normalizedRect(
+        QtCore.QRectF(8, 7, -6, -4)
+    ) == QtCore.QRectF(2, 3, 6, 4)
+    assert QuickGraphLib.Helpers.normalizedRect(
+        QtCore.QRectF(2, 3, 0, 0)
+    ) == QtCore.QRectF(2, 3, 0, 0)
+
+
 def test_is_inside_ellipse_rejects_invalid_radii() -> None:
     center = QtCore.QPointF(5, 4)
 
