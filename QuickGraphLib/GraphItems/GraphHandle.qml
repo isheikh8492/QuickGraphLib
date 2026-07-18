@@ -27,6 +27,7 @@ Item {
         Square
     }
 
+    readonly property point _mappedPosition: dataTransform.map(position)
     property point _pressOffset: Qt.point(0, 0)
     /*!
         The mouse cursor shown while hovering the handle.
@@ -63,7 +64,6 @@ Item {
         The fill color used while hovered.
     */
     property color hoverFillColor: "#fff6bf"
-    readonly property point mappedPosition: dataTransform.map(position)
     /*!
         Whether the handle can be dragged.
     */
@@ -116,8 +116,8 @@ Item {
 
     height: hitSize
     width: hitSize
-    x: mappedPosition.x - width / 2
-    y: mappedPosition.y - height / 2
+    x: _mappedPosition.x - width / 2
+    y: _mappedPosition.y - height / 2
     z: 10
 
     Rectangle {

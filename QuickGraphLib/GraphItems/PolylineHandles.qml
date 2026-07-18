@@ -19,8 +19,12 @@ BaseHandles {
     id: root
 
     property bool _bodyDragging: false
-    property bool _bodyHovered: false
     property point _lastDragPoint: Qt.point(0, 0)
+    readonly property real _mappedBottom: _mappedPoints.length === 0 ? 0 : Math.max(..._mappedPoints.map(point => point.y))
+    readonly property real _mappedLeft: _mappedPoints.length === 0 ? 0 : Math.min(..._mappedPoints.map(point => point.x))
+    readonly property var _mappedPoints: points.map(point => dataTransform.map(point))
+    readonly property real _mappedRight: _mappedPoints.length === 0 ? 0 : Math.max(..._mappedPoints.map(point => point.x))
+    readonly property real _mappedTop: _mappedPoints.length === 0 ? 0 : Math.min(..._mappedPoints.map(point => point.y))
     /*!
         The mouse hit target size of vertex handles.
     */
@@ -32,16 +36,11 @@ BaseHandles {
     /*!
         GraphHandle objects rendered by this item.
     */
-    readonly property var handles: vertexHandleRepeater.items
+    readonly property var handles: vertexHandleRepeater._items
     /*!
         The body hit target width in pixels.
     */
     property real hitWidth: 18
-    readonly property real mappedBottom: mappedPoints.length === 0 ? 0 : Math.max(...mappedPoints.map(point => point.y))
-    readonly property real mappedLeft: mappedPoints.length === 0 ? 0 : Math.min(...mappedPoints.map(point => point.x))
-    readonly property var mappedPoints: points.map(point => dataTransform.map(point))
-    readonly property real mappedRight: mappedPoints.length === 0 ? 0 : Math.max(...mappedPoints.map(point => point.x))
-    readonly property real mappedTop: mappedPoints.length === 0 ? 0 : Math.min(...mappedPoints.map(point => point.y))
     /*!
         Whether dragging the polyline body should emit movement signals.
     */
@@ -74,16 +73,16 @@ BaseHandles {
     */
     signal pointMoved(int index, point position)
 
-    function bodyScenePoint(localPoint) {
+    function _bodyScenePoint(localPoint) {
         return root.mapFromItem(bodyMouseArea, localPoint);
     }
-    function containsBodyPoint(localPoint) {
-        return containsBodyScenePoint(bodyScenePoint(localPoint));
+    function _containsBodyPoint(localPoint) {
+        return _containsBodyScenePoint(_bodyScenePoint(localPoint));
     }
-    function containsBodyScenePoint(scenePoint) {
-        return QuickGraphLib.Helpers.isNearPolyline(scenePoint, mappedPoints, hitWidth, false);
+    function _containsBodyScenePoint(scenePoint) {
+        return QuickGraphLib.Helpers.isNearPolyline(scenePoint, _mappedPoints, hitWidth, false);
     }
-    function handleIndex(handle) {
+    function _handleIndex(handle) {
         return parseInt(handle.objectName.slice(5));
     }
 
@@ -95,7 +94,7 @@ BaseHandles {
     Repeater {
         id: vertexHandleRepeater
 
-        readonly property var items: Array.from({
+        readonly property var _items: Array.from({
             length: count
         }, (_, index) => itemAt(index))
 
@@ -136,11 +135,11 @@ BaseHandles {
 
         cursorShape: root.movable && (root._bodyHovered || root._bodyDragging) ? Qt.SizeAllCursor : Qt.ArrowCursor
         enabled: root.points.length > 0 && root.enabled
-        height: Math.max(root.mappedBottom - root.mappedTop, root.hitWidth)
+        height: Math.max(root._mappedBottom - root._mappedTop, root.hitWidth)
         hoverEnabled: true
-        width: Math.max(root.mappedRight - root.mappedLeft, root.hitWidth)
-        x: root.mappedLeft - (width - (root.mappedRight - root.mappedLeft)) / 2
-        y: root.mappedTop - (height - (root.mappedBottom - root.mappedTop)) / 2
+        width: Math.max(root._mappedRight - root._mappedLeft, root.hitWidth)
+        x: root._mappedLeft - (width - (root._mappedRight - root._mappedLeft)) / 2
+        y: root._mappedTop - (height - (root._mappedBottom - root._mappedTop)) / 2
 
         onCanceled: {
             root._bodyDragging = false;
@@ -149,7 +148,7 @@ BaseHandles {
             root._bodyHovered = false;
         }
         onPositionChanged: event => {
-            root._bodyHovered = root.containsBodyPoint(Qt.point(event.x, event.y));
+            root._bodyHovered = root._containsBodyPoint(Qt.point(event.x, event.y));
             if (!root._bodyDragging || !root.movable)
                 return;
             let currentPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
@@ -158,7 +157,7 @@ BaseHandles {
             root.moved(delta);
         }
         onPressed: event => {
-            if (!root.containsBodyPoint(Qt.point(event.x, event.y))) {
+            if (!root._containsBodyPoint(Qt.point(event.x, event.y))) {
                 root._bodyDragging = false;
                 event.accepted = false;
                 return;

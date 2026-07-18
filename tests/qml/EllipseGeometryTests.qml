@@ -30,18 +30,18 @@ Item {
         let topCenter = Qt.point(center.x, top);
         let mappedRect = ellipse.dataTransform.mapRect(Qt.rect(left, top, right - left, bottom - top));
 
-        assertClose(ellipse.dataLeft, left, message + " dataLeft");
-        assertClose(ellipse.dataRight, right, message + " dataRight");
-        assertClose(ellipse.dataTop, top, message + " dataTop");
-        assertClose(ellipse.dataBottom, bottom, message + " dataBottom");
-        assertPointClose(ellipse.dataCenter, center, message + " dataCenter");
-        assertPointClose(ellipse.dataRightCenter, rightCenter, message + " dataRightCenter");
-        assertPointClose(ellipse.dataTopCenter, topCenter, message + " dataTopCenter");
-        assertPointClose(ellipse.mappedCenter, ellipse.dataTransform.map(center), message + " mappedCenter");
-        assertPointClose(ellipse.mappedRightCenter, ellipse.dataTransform.map(rightCenter), message + " mappedRightCenter");
-        assertPointClose(ellipse.mappedTopCenter, ellipse.dataTransform.map(topCenter), message + " mappedTopCenter");
-        assertClose(ellipse.radiusX, mappedRect.width / 2, message + " radiusX");
-        assertClose(ellipse.radiusY, mappedRect.height / 2, message + " radiusY");
+        assertClose(ellipse._dataLeft, left, message + " dataLeft");
+        assertClose(ellipse._dataRight, right, message + " dataRight");
+        assertClose(ellipse._dataTop, top, message + " dataTop");
+        assertClose(ellipse._dataBottom, bottom, message + " dataBottom");
+        assertPointClose(ellipse._dataCenter, center, message + " dataCenter");
+        assertPointClose(ellipse._dataRightCenter, rightCenter, message + " dataRightCenter");
+        assertPointClose(ellipse._dataTopCenter, topCenter, message + " dataTopCenter");
+        assertPointClose(ellipse._mappedCenter, ellipse.dataTransform.map(center), message + " mappedCenter");
+        assertPointClose(ellipse._mappedRightCenter, ellipse.dataTransform.map(rightCenter), message + " mappedRightCenter");
+        assertPointClose(ellipse._mappedTopCenter, ellipse.dataTransform.map(topCenter), message + " mappedTopCenter");
+        assertClose(ellipse._radiusX, mappedRect.width / 2, message + " radiusX");
+        assertClose(ellipse._radiusY, mappedRect.height / 2, message + " radiusY");
     }
     function assertPointClose(actual, expected, message) {
         assertClose(actual.x, expected.x, message + " x");

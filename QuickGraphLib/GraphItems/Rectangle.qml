@@ -18,14 +18,19 @@ import QtQuick.Shapes as QQS
 QQS.ShapePath {
     id: root
 
-    readonly property real dataBottom: Math.max(dataRect.y, dataRect.y + dataRect.height)
-    readonly property real dataLeft: Math.min(dataRect.x, dataRect.x + dataRect.width)
+    readonly property real _dataBottom: Math.max(dataRect.y, dataRect.y + dataRect.height)
+    readonly property real _dataLeft: Math.min(dataRect.x, dataRect.x + dataRect.width)
+    readonly property real _dataRight: Math.max(dataRect.x, dataRect.x + dataRect.width)
+    readonly property real _dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
+    // Map corners independently so non-axis-aligned transforms preserve the rectangle geometry.
+    readonly property point _mappedBottomLeft: dataTransform.map(Qt.point(_dataLeft, _dataBottom))
+    readonly property point _mappedBottomRight: dataTransform.map(Qt.point(_dataRight, _dataBottom))
+    readonly property point _mappedTopLeft: dataTransform.map(Qt.point(_dataLeft, _dataTop))
+    readonly property point _mappedTopRight: dataTransform.map(Qt.point(_dataRight, _dataTop))
     /*!
         The rectangle in data coordinates.
     */
     required property rect dataRect
-    readonly property real dataRight: Math.max(dataRect.x, dataRect.x + dataRect.width)
-    readonly property real dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
 
     /*!
         Must be assigned the data transform of the graph area this rectangle is paired to.
@@ -33,32 +38,27 @@ QQS.ShapePath {
         \sa GraphArea::dataTransform
     */
     required property matrix4x4 dataTransform
-    // Map corners independently so non-axis-aligned transforms preserve the rectangle geometry.
-    readonly property point mappedBottomLeft: dataTransform.map(Qt.point(dataLeft, dataBottom))
-    readonly property point mappedBottomRight: dataTransform.map(Qt.point(dataRight, dataBottom))
-    readonly property point mappedTopLeft: dataTransform.map(Qt.point(dataLeft, dataTop))
-    readonly property point mappedTopRight: dataTransform.map(Qt.point(dataRight, dataTop))
 
     fillColor: "transparent"
     joinStyle: QQS.ShapePath.RoundJoin
     pathHints: QQS.ShapePath.PathLinear | QQS.ShapePath.PathConvex | QQS.ShapePath.PathSolid
-    startX: mappedTopLeft.x
-    startY: mappedTopLeft.y
+    startX: _mappedTopLeft.x
+    startY: _mappedTopLeft.y
 
     PathLine {
-        x: root.mappedTopRight.x
-        y: root.mappedTopRight.y
+        x: root._mappedTopRight.x
+        y: root._mappedTopRight.y
     }
     PathLine {
-        x: root.mappedBottomRight.x
-        y: root.mappedBottomRight.y
+        x: root._mappedBottomRight.x
+        y: root._mappedBottomRight.y
     }
     PathLine {
-        x: root.mappedBottomLeft.x
-        y: root.mappedBottomLeft.y
+        x: root._mappedBottomLeft.x
+        y: root._mappedBottomLeft.y
     }
     PathLine {
-        x: root.mappedTopLeft.x
-        y: root.mappedTopLeft.y
+        x: root._mappedTopLeft.x
+        y: root._mappedTopLeft.y
     }
 }

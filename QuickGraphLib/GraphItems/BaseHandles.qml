@@ -18,6 +18,8 @@ import QtQuick
 Item {
     id: root
 
+    property bool _bodyHovered: false
+
     /*!
         Must be assigned the data transform of the graph area this handle item is paired to.
 
@@ -48,6 +50,10 @@ Item {
         Whether handles should be visible.
     */
     property bool handlesVisible: selected
+    /*!
+        Whether the pointer is currently over the shape body.
+    */
+    readonly property bool hovered: enabled && _bodyHovered
     /*!
         The application ROI or gate model associated with this handle overlay.
 

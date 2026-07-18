@@ -19,9 +19,13 @@ BaseHandles {
     id: root
 
     property bool _bodyDragging: false
-    property bool _bodyHovered: false
     property point _lastDragPoint: Qt.point(0, 0)
-    readonly property rect _mappedRect: QuickGraphLib.Helpers.boundingRect(mappedPoints)
+    readonly property real _mappedBottom: _mappedRect.bottom
+    readonly property real _mappedLeft: _mappedRect.left
+    readonly property var _mappedPoints: QuickGraphLib.Helpers.mapPoints(points, root.dataTransform)
+    readonly property rect _mappedRect: QuickGraphLib.Helpers.boundingRect(_mappedPoints)
+    readonly property real _mappedRight: _mappedRect.right
+    readonly property real _mappedTop: _mappedRect.top
     /*!
         The mouse hit target size of vertex handles.
     */
@@ -33,16 +37,11 @@ BaseHandles {
     /*!
         GraphHandle objects rendered by this item.
     */
-    readonly property var handles: vertexHandleRepeater.items
+    readonly property var handles: vertexHandleRepeater._items
     /*!
         The body hit target padding in pixels.
     */
     property real hitPadding: 8
-    readonly property real mappedBottom: _mappedRect.bottom
-    readonly property real mappedLeft: _mappedRect.left
-    readonly property var mappedPoints: QuickGraphLib.Helpers.mapPoints(points, root.dataTransform)
-    readonly property real mappedRight: _mappedRect.right
-    readonly property real mappedTop: _mappedRect.top
     /*!
         Whether dragging the polygon body should emit movement signals.
     */
@@ -75,16 +74,16 @@ BaseHandles {
     */
     signal pointMoved(int index, point position)
 
-    function bodyScenePoint(localPoint) {
+    function _bodyScenePoint(localPoint) {
         return root.mapFromItem(bodyMouseArea, localPoint);
     }
-    function containsBodyPoint(localPoint) {
-        return containsBodyScenePoint(bodyScenePoint(localPoint));
+    function _containsBodyPoint(localPoint) {
+        return _containsBodyScenePoint(_bodyScenePoint(localPoint));
     }
-    function containsBodyScenePoint(scenePoint) {
-        return QuickGraphLib.Helpers.isInsidePolygon(scenePoint, mappedPoints) || QuickGraphLib.Helpers.isNearPolyline(scenePoint, mappedPoints, hitPadding * 2, true);
+    function _containsBodyScenePoint(scenePoint) {
+        return QuickGraphLib.Helpers.isInsidePolygon(scenePoint, _mappedPoints) || QuickGraphLib.Helpers.isNearPolyline(scenePoint, _mappedPoints, hitPadding * 2, true);
     }
-    function handleIndex(handle) {
+    function _handleIndex(handle) {
         return parseInt(handle.objectName.slice(5));
     }
 
@@ -96,7 +95,7 @@ BaseHandles {
     Repeater {
         id: vertexHandleRepeater
 
-        readonly property var items: Array.from({
+        readonly property var _items: Array.from({
             length: count
         }, (_, index) => itemAt(index))
 
@@ -137,11 +136,11 @@ BaseHandles {
 
         cursorShape: root.movable && (root._bodyHovered || root._bodyDragging) ? Qt.SizeAllCursor : Qt.ArrowCursor
         enabled: root.points.length > 0 && root.enabled
-        height: Math.max(root.mappedBottom - root.mappedTop + root.hitPadding * 2, root.hitPadding * 2)
+        height: Math.max(root._mappedBottom - root._mappedTop + root.hitPadding * 2, root.hitPadding * 2)
         hoverEnabled: true
-        width: Math.max(root.mappedRight - root.mappedLeft + root.hitPadding * 2, root.hitPadding * 2)
-        x: root.mappedLeft - root.hitPadding
-        y: root.mappedTop - root.hitPadding
+        width: Math.max(root._mappedRight - root._mappedLeft + root.hitPadding * 2, root.hitPadding * 2)
+        x: root._mappedLeft - root.hitPadding
+        y: root._mappedTop - root.hitPadding
 
         onCanceled: {
             root._bodyDragging = false;
@@ -150,7 +149,7 @@ BaseHandles {
             root._bodyHovered = false;
         }
         onPositionChanged: event => {
-            root._bodyHovered = root.containsBodyPoint(Qt.point(event.x, event.y));
+            root._bodyHovered = root._containsBodyPoint(Qt.point(event.x, event.y));
             if (!root._bodyDragging || !root.movable)
                 return;
             let currentPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
@@ -159,7 +158,7 @@ BaseHandles {
             root.moved(delta);
         }
         onPressed: event => {
-            if (!root.containsBodyPoint(Qt.point(event.x, event.y))) {
+            if (!root._containsBodyPoint(Qt.point(event.x, event.y))) {
                 root._bodyDragging = false;
                 event.accepted = false;
                 return;

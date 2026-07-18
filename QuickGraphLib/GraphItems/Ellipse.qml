@@ -19,19 +19,24 @@ import QuickGraphLib as QuickGraphLib
 QQS.ShapePath {
     id: root
 
+    readonly property real _dataBottom: _normalizedDataRect.bottom
+    readonly property point _dataCenter: Qt.point((_normalizedDataRect.left + _normalizedDataRect.right) / 2, (_normalizedDataRect.top + _normalizedDataRect.bottom) / 2)
+    readonly property real _dataLeft: _normalizedDataRect.left
+    readonly property real _dataRight: _normalizedDataRect.right
+    readonly property point _dataRightCenter: Qt.point(_dataRight, _dataCenter.y)
+    readonly property real _dataTop: _normalizedDataRect.top
+    readonly property point _dataTopCenter: Qt.point(_dataCenter.x, _dataTop)
+    readonly property point _mappedCenter: dataTransform.map(_dataCenter)
     readonly property rect _mappedRect: dataTransform.mapRect(_normalizedDataRect)
+    readonly property point _mappedRightCenter: dataTransform.map(_dataRightCenter)
+    readonly property point _mappedTopCenter: dataTransform.map(_dataTopCenter)
     readonly property rect _normalizedDataRect: QuickGraphLib.Helpers.normalizedRect(dataRect)
-    readonly property real dataBottom: _normalizedDataRect.bottom
-    readonly property point dataCenter: Qt.point((_normalizedDataRect.left + _normalizedDataRect.right) / 2, (_normalizedDataRect.top + _normalizedDataRect.bottom) / 2)
-    readonly property real dataLeft: _normalizedDataRect.left
+    readonly property real _radiusX: _mappedRect.width / 2
+    readonly property real _radiusY: _mappedRect.height / 2
     /*!
         The ellipse bounding rectangle in data coordinates.
     */
     required property rect dataRect
-    readonly property real dataRight: _normalizedDataRect.right
-    readonly property point dataRightCenter: Qt.point(dataRight, dataCenter.y)
-    readonly property real dataTop: _normalizedDataRect.top
-    readonly property point dataTopCenter: Qt.point(dataCenter.x, dataTop)
 
     /*!
         Must be assigned the data transform of the graph area this ellipse is paired to.
@@ -39,20 +44,15 @@ QQS.ShapePath {
         \sa GraphArea::dataTransform
     */
     required property matrix4x4 dataTransform
-    readonly property point mappedCenter: dataTransform.map(dataCenter)
-    readonly property point mappedRightCenter: dataTransform.map(dataRightCenter)
-    readonly property point mappedTopCenter: dataTransform.map(dataTopCenter)
-    readonly property real radiusX: _mappedRect.width / 2
-    readonly property real radiusY: _mappedRect.height / 2
 
     fillColor: "transparent"
     pathHints: QQS.ShapePath.PathConvex | QQS.ShapePath.PathSolid
 
     PathAngleArc {
-        centerX: root.mappedCenter.x
-        centerY: root.mappedCenter.y
-        radiusX: root.radiusX
-        radiusY: root.radiusY
+        centerX: root._mappedCenter.x
+        centerY: root._mappedCenter.y
+        radiusX: root._radiusX
+        radiusY: root._radiusY
         startAngle: 0
         sweepAngle: 360
     }

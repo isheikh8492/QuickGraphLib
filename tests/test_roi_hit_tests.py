@@ -49,6 +49,41 @@ def test_roi_handles_expose_role_specific_cursors() -> None:
     _run_qml_test("RoiHandleCursorTests.qml")
 
 
+def test_roi_handles_expose_body_hover_state() -> None:
+    for shape in ("line", "polyline", "polygon", "ellipse", "rectangle"):
+
+        def verify_hover_state(item, app, shape=shape) -> None:
+            window = QtQuick.QQuickWindow()
+            window.resize(int(item.width()), int(item.height()))
+            item.setProperty("activeShape", shape)
+            item.setParentItem(window.contentItem())
+            window.show()
+            app.processEvents()
+
+            try:
+                inside = item.property(f"{shape}InsidePoint")
+                outside = item.property(f"{shape}OutsidePoint")
+
+                QtTest.QTest.mouseMove(window, outside.toPoint())
+                app.processEvents()
+                QtTest.QTest.mouseMove(window, inside.toPoint())
+                app.processEvents()
+                assert item.property(f"{shape}Hovered"), (
+                    f"{shape} body hover was not exposed"
+                )
+
+                QtTest.QTest.mouseMove(window, outside.toPoint())
+                app.processEvents()
+                assert not item.property(f"{shape}Hovered"), (
+                    f"{shape} reported hover outside its body"
+                )
+            finally:
+                item.setParentItem(None)
+                window.close()
+
+        _run_qml_test("RoiHoverTests.qml", verify_hover_state)
+
+
 def test_graph_handle_stacking_default_and_override() -> None:
     def click_overlapping_handle(item, app) -> None:
         window = QtQuick.QQuickWindow()

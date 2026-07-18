@@ -25,8 +25,10 @@ BaseHandles {
     }
 
     property bool _bodyDragging: false
-    property bool _bodyHovered: false
+    readonly property point _centerPoint: Qt.point((point1.x + point2.x) / 2, (point1.y + point2.y) / 2)
     property point _lastDragPoint: Qt.point(0, 0)
+    readonly property point _mappedPoint1: dataTransform.map(point1)
+    readonly property point _mappedPoint2: dataTransform.map(point2)
     /*!
         A direct reference to the optional center move handle.
     */
@@ -45,7 +47,6 @@ BaseHandles {
         The visual size and hit target size of the center handle.
     */
     property real centerHandleSize: handleSize
-    readonly property point centerPoint: Qt.point((point1.x + point2.x) / 2, (point1.y + point2.y) / 2)
 
     /*!
         Optional visual delegate used for endpoint resize handles.
@@ -69,13 +70,14 @@ BaseHandles {
         The visual size and hit target size of endpoint handles.
     */
     property real handleSize: 8
+    /*!
+        GraphHandle objects rendered by this item.
+    */
     readonly property var handles: [point1GraphHandle, point2GraphHandle, centerGraphHandle]
     /*!
         The body hit target width in pixels.
     */
     property real hitWidth: 18
-    readonly property point mappedPoint1: dataTransform.map(point1)
-    readonly property point mappedPoint2: dataTransform.map(point2)
     /*!
         Whether dragging the segment body should emit movement signals.
     */
@@ -111,14 +113,14 @@ BaseHandles {
     */
     signal point2Moved(point position)
 
-    function bodyScenePoint(localPoint) {
+    function _bodyScenePoint(localPoint) {
         return root.mapFromItem(bodyMouseArea, localPoint);
     }
-    function containsBodyPoint(localPoint) {
-        return containsBodyScenePoint(bodyScenePoint(localPoint));
+    function _containsBodyPoint(localPoint) {
+        return _containsBodyScenePoint(_bodyScenePoint(localPoint));
     }
-    function containsBodyScenePoint(scenePoint) {
-        return QuickGraphLib.Helpers.isNearSegment(scenePoint, mappedPoint1, mappedPoint2, hitWidth);
+    function _containsBodyScenePoint(scenePoint) {
+        return QuickGraphLib.Helpers.isNearSegment(scenePoint, _mappedPoint1, _mappedPoint2, hitWidth);
     }
 
     height: parent ? parent.height : 0
@@ -129,16 +131,16 @@ BaseHandles {
     MouseArea {
         id: bodyMouseArea
 
-        property real segmentLeft: Math.min(root.mappedPoint1.x, root.mappedPoint2.x)
-        property real segmentTop: Math.min(root.mappedPoint1.y, root.mappedPoint2.y)
+        property real _segmentLeft: Math.min(root._mappedPoint1.x, root._mappedPoint2.x)
+        property real _segmentTop: Math.min(root._mappedPoint1.y, root._mappedPoint2.y)
 
         cursorShape: root.movable && (root._bodyHovered || root._bodyDragging) ? Qt.SizeAllCursor : Qt.ArrowCursor
         enabled: root.enabled
-        height: Math.max(Math.abs(root.mappedPoint2.y - root.mappedPoint1.y), root.hitWidth)
+        height: Math.max(Math.abs(root._mappedPoint2.y - root._mappedPoint1.y), root.hitWidth)
         hoverEnabled: true
-        width: Math.max(Math.abs(root.mappedPoint2.x - root.mappedPoint1.x), root.hitWidth)
-        x: segmentLeft - (width - Math.abs(root.mappedPoint2.x - root.mappedPoint1.x)) / 2
-        y: segmentTop - (height - Math.abs(root.mappedPoint2.y - root.mappedPoint1.y)) / 2
+        width: Math.max(Math.abs(root._mappedPoint2.x - root._mappedPoint1.x), root.hitWidth)
+        x: _segmentLeft - (width - Math.abs(root._mappedPoint2.x - root._mappedPoint1.x)) / 2
+        y: _segmentTop - (height - Math.abs(root._mappedPoint2.y - root._mappedPoint1.y)) / 2
 
         onCanceled: {
             root._bodyDragging = false;
@@ -147,7 +149,7 @@ BaseHandles {
             root._bodyHovered = false;
         }
         onPositionChanged: event => {
-            root._bodyHovered = root.containsBodyPoint(Qt.point(event.x, event.y));
+            root._bodyHovered = root._containsBodyPoint(Qt.point(event.x, event.y));
             if (!root._bodyDragging || !root.movable)
                 return;
             let currentPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
@@ -156,7 +158,7 @@ BaseHandles {
             root.moved(delta);
         }
         onPressed: event => {
-            if (!root.containsBodyPoint(Qt.point(event.x, event.y))) {
+            if (!root._containsBodyPoint(Qt.point(event.x, event.y))) {
                 root._bodyDragging = false;
                 event.accepted = false;
                 return;
@@ -231,7 +233,7 @@ BaseHandles {
         hoverFillColor: root.handleHoverFillColor
         movable: root.movable
         objectName: "center"
-        position: root.centerPoint
+        position: root._centerPoint
         role: GraphHandle.Move
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor

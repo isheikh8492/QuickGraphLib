@@ -19,7 +19,7 @@ import QuickGraphLib as QuickGraphLib
 QQS.ShapePath {
     id: root
 
-    readonly property var closedPoints: {
+    readonly property var _closedPoints: {
         if (points.length === 0)
             return [];
         let nextPoints = points.slice();
@@ -43,6 +43,6 @@ QQS.ShapePath {
     pathHints: QQS.ShapePath.PathLinear | QQS.ShapePath.PathSolid
 
     PathPolyline {
-        path: QuickGraphLib.Helpers.mapPoints(root.closedPoints, root.dataTransform)
+        path: QuickGraphLib.Helpers.mapPoints(root._closedPoints, root.dataTransform)
     }
 }

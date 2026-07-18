@@ -25,13 +25,25 @@ BaseHandles {
     }
 
     property bool _bodyDragging: false
-    property bool _bodyHovered: false
+    readonly property point _bottomHandlePoint: Qt.point(_centerPoint.x, _dataBottom)
+    readonly property point _centerPoint: Qt.point((_dataLeft + _dataRight) / 2, (_dataTop + _dataBottom) / 2)
+    readonly property real _dataBottom: Math.max(dataRect.y, dataRect.y + dataRect.height)
+    readonly property real _dataLeft: Math.min(dataRect.x, dataRect.x + dataRect.width)
+    readonly property real _dataRight: Math.max(dataRect.x, dataRect.x + dataRect.width)
+    readonly property real _dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
     property point _lastDragPoint: Qt.point(0, 0)
+    readonly property point _leftHandlePoint: Qt.point(_dataLeft, _centerPoint.y)
+    readonly property point _mappedBottomHandle: dataTransform.map(_bottomHandlePoint)
+    readonly property point _mappedCenter: dataTransform.map(_centerPoint)
+    readonly property point _mappedLeftHandle: dataTransform.map(_leftHandlePoint)
+    readonly property point _mappedRightHandle: dataTransform.map(_rightHandlePoint)
+    readonly property point _mappedTopHandle: dataTransform.map(_topHandlePoint)
+    readonly property point _rightHandlePoint: Qt.point(_dataRight, _centerPoint.y)
+    readonly property point _topHandlePoint: Qt.point(_centerPoint.x, _dataTop)
     /*!
         A direct reference to the bottom resize handle.
     */
     readonly property alias bottomHandle: bottomGraphHandle
-    readonly property point bottomHandlePoint: Qt.point(centerPoint.x, dataBottom)
     /*!
         Optional visual delegate used for cardinal resize handles.
 
@@ -64,15 +76,10 @@ BaseHandles {
         The visual size and hit target size of the center handle.
     */
     property real centerHandleSize: handleSize
-    readonly property point centerPoint: Qt.point((dataLeft + dataRight) / 2, (dataTop + dataBottom) / 2)
-    readonly property real dataBottom: Math.max(dataRect.y, dataRect.y + dataRect.height)
-    readonly property real dataLeft: Math.min(dataRect.x, dataRect.x + dataRect.width)
     /*!
         The ellipse bounding rectangle in data coordinates.
     */
     required property rect dataRect
-    readonly property real dataRight: Math.max(dataRect.x, dataRect.x + dataRect.width)
-    readonly property real dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
 
     /*!
         Which built-in handles should be shown.
@@ -82,18 +89,15 @@ BaseHandles {
         The visual size and hit target size of cardinal resize handles.
     */
     property real handleSize: 8
+    /*!
+        GraphHandle objects rendered by this item.
+    */
     readonly property var handles: [leftGraphHandle, rightGraphHandle, topGraphHandle, bottomGraphHandle, centerGraphHandle]
 
     /*!
         A direct reference to the left resize handle.
     */
     readonly property alias leftHandle: leftGraphHandle
-    readonly property point leftHandlePoint: Qt.point(dataLeft, centerPoint.y)
-    readonly property point mappedBottomHandle: dataTransform.map(bottomHandlePoint)
-    readonly property point mappedCenter: dataTransform.map(centerPoint)
-    readonly property point mappedLeftHandle: dataTransform.map(leftHandlePoint)
-    readonly property point mappedRightHandle: dataTransform.map(rightHandlePoint)
-    readonly property point mappedTopHandle: dataTransform.map(topHandlePoint)
     /*!
         The minimum height emitted when resize handles are dragged toward the opposite edge.
     */
@@ -110,12 +114,10 @@ BaseHandles {
         A direct reference to the right resize handle.
     */
     readonly property alias rightHandle: rightGraphHandle
-    readonly property point rightHandlePoint: Qt.point(dataRight, centerPoint.y)
     /*!
         A direct reference to the top resize handle.
     */
     readonly property alias topHandle: topGraphHandle
-    readonly property point topHandlePoint: Qt.point(centerPoint.x, dataTop)
 
     /*!
         Emitted when the ellipse body has moved by \a delta in data coordinates.
@@ -126,38 +128,38 @@ BaseHandles {
     */
     signal resized(rect dataRect)
 
-    function bodyScenePoint(localPoint) {
+    function _bodyScenePoint(localPoint) {
         return root.mapFromItem(bodyMouseArea, localPoint);
     }
-    function containsBodyPoint(localPoint) {
-        return containsBodyScenePoint(bodyScenePoint(localPoint));
+    function _containsBodyPoint(localPoint) {
+        return _containsBodyScenePoint(_bodyScenePoint(localPoint));
     }
-    function containsBodyScenePoint(scenePoint) {
-        let radiusX = Math.abs(root.mappedRightHandle.x - root.mappedCenter.x);
-        let radiusY = Math.abs(root.mappedTopHandle.y - root.mappedCenter.y);
-        return QuickGraphLib.Helpers.isInsideEllipse(scenePoint, root.mappedCenter, radiusX, radiusY);
+    function _containsBodyScenePoint(scenePoint) {
+        let radiusX = Math.abs(root._mappedRightHandle.x - root._mappedCenter.x);
+        let radiusY = Math.abs(root._mappedTopHandle.y - root._mappedCenter.y);
+        return QuickGraphLib.Helpers.isInsideEllipse(scenePoint, root._mappedCenter, radiusX, radiusY);
     }
-    function normalizedRect(left, top, right, bottom) {
+    function _normalizedRect(left, top, right, bottom) {
         let normalizedLeft = Math.min(left, right);
         let normalizedRight = Math.max(left, right);
         let normalizedTop = Math.min(top, bottom);
         let normalizedBottom = Math.max(top, bottom);
         return Qt.rect(normalizedLeft, normalizedTop, normalizedRight - normalizedLeft, normalizedBottom - normalizedTop);
     }
-    function resizedFromHandle(handle, position) {
+    function _resizedFromHandle(handle, position) {
         let minimumWidth = Math.max(0, root.minimumDataWidth);
         let minimumHeight = Math.max(0, root.minimumDataHeight);
         if (handle.objectName === "left") {
-            return normalizedRect(Math.min(position.x, root.dataRight - minimumWidth), root.dataTop, root.dataRight, root.dataBottom);
+            return _normalizedRect(Math.min(position.x, root._dataRight - minimumWidth), root._dataTop, root._dataRight, root._dataBottom);
         }
         if (handle.objectName === "right") {
-            return normalizedRect(root.dataLeft, root.dataTop, Math.max(position.x, root.dataLeft + minimumWidth), root.dataBottom);
+            return _normalizedRect(root._dataLeft, root._dataTop, Math.max(position.x, root._dataLeft + minimumWidth), root._dataBottom);
         }
         if (handle.objectName === "top") {
-            return normalizedRect(root.dataLeft, Math.min(position.y, root.dataBottom - minimumHeight), root.dataRight, root.dataBottom);
+            return _normalizedRect(root._dataLeft, Math.min(position.y, root._dataBottom - minimumHeight), root._dataRight, root._dataBottom);
         }
         if (handle.objectName === "bottom") {
-            return normalizedRect(root.dataLeft, root.dataTop, root.dataRight, Math.max(position.y, root.dataTop + minimumHeight));
+            return _normalizedRect(root._dataLeft, root._dataTop, root._dataRight, Math.max(position.y, root._dataTop + minimumHeight));
         }
         return root.dataRect;
     }
@@ -170,18 +172,18 @@ BaseHandles {
     MouseArea {
         id: bodyMouseArea
 
-        property real bodyBottom: Math.max(root.mappedTopHandle.y, root.mappedBottomHandle.y)
-        property real bodyLeft: Math.min(root.mappedLeftHandle.x, root.mappedRightHandle.x)
-        property real bodyRight: Math.max(root.mappedLeftHandle.x, root.mappedRightHandle.x)
-        property real bodyTop: Math.min(root.mappedTopHandle.y, root.mappedBottomHandle.y)
+        property real _bodyBottom: Math.max(root._mappedTopHandle.y, root._mappedBottomHandle.y)
+        property real _bodyLeft: Math.min(root._mappedLeftHandle.x, root._mappedRightHandle.x)
+        property real _bodyRight: Math.max(root._mappedLeftHandle.x, root._mappedRightHandle.x)
+        property real _bodyTop: Math.min(root._mappedTopHandle.y, root._mappedBottomHandle.y)
 
         cursorShape: root.movable && (root._bodyHovered || root._bodyDragging) ? Qt.SizeAllCursor : Qt.ArrowCursor
         enabled: root.enabled
-        height: bodyBottom - bodyTop
+        height: _bodyBottom - _bodyTop
         hoverEnabled: true
-        width: bodyRight - bodyLeft
-        x: bodyLeft
-        y: bodyTop
+        width: _bodyRight - _bodyLeft
+        x: _bodyLeft
+        y: _bodyTop
 
         onCanceled: {
             root._bodyDragging = false;
@@ -190,7 +192,7 @@ BaseHandles {
             root._bodyHovered = false;
         }
         onPositionChanged: event => {
-            root._bodyHovered = root.containsBodyPoint(Qt.point(event.x, event.y));
+            root._bodyHovered = root._containsBodyPoint(Qt.point(event.x, event.y));
             if (!root._bodyDragging || !root.movable)
                 return;
             let currentPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
@@ -199,7 +201,7 @@ BaseHandles {
             root.moved(delta);
         }
         onPressed: event => {
-            if (!root.containsBodyPoint(Qt.point(event.x, event.y))) {
+            if (!root._containsBodyPoint(Qt.point(event.x, event.y))) {
                 root._bodyDragging = false;
                 event.accepted = false;
                 return;
@@ -222,7 +224,7 @@ BaseHandles {
         hoverFillColor: root.handleHoverFillColor
         movable: root.cardinalHandlesMovable
         objectName: "left"
-        position: root.leftHandlePoint
+        position: root._leftHandlePoint
         role: GraphHandle.Resize
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
@@ -235,7 +237,7 @@ BaseHandles {
         onClicked: root.handleClicked(root.roi, root.shape, leftGraphHandle)
         onMoved: position => {
             root.handleMoved(leftGraphHandle, position);
-            root.resized(root.resizedFromHandle(leftGraphHandle, position));
+            root.resized(root._resizedFromHandle(leftGraphHandle, position));
         }
     }
     GraphHandle {
@@ -248,7 +250,7 @@ BaseHandles {
         hoverFillColor: root.handleHoverFillColor
         movable: root.cardinalHandlesMovable
         objectName: "right"
-        position: root.rightHandlePoint
+        position: root._rightHandlePoint
         role: GraphHandle.Resize
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
@@ -261,7 +263,7 @@ BaseHandles {
         onClicked: root.handleClicked(root.roi, root.shape, rightGraphHandle)
         onMoved: position => {
             root.handleMoved(rightGraphHandle, position);
-            root.resized(root.resizedFromHandle(rightGraphHandle, position));
+            root.resized(root._resizedFromHandle(rightGraphHandle, position));
         }
     }
     GraphHandle {
@@ -274,7 +276,7 @@ BaseHandles {
         hoverFillColor: root.handleHoverFillColor
         movable: root.cardinalHandlesMovable
         objectName: "top"
-        position: root.topHandlePoint
+        position: root._topHandlePoint
         role: GraphHandle.Resize
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
@@ -287,7 +289,7 @@ BaseHandles {
         onClicked: root.handleClicked(root.roi, root.shape, topGraphHandle)
         onMoved: position => {
             root.handleMoved(topGraphHandle, position);
-            root.resized(root.resizedFromHandle(topGraphHandle, position));
+            root.resized(root._resizedFromHandle(topGraphHandle, position));
         }
     }
     GraphHandle {
@@ -300,7 +302,7 @@ BaseHandles {
         hoverFillColor: root.handleHoverFillColor
         movable: root.cardinalHandlesMovable
         objectName: "bottom"
-        position: root.bottomHandlePoint
+        position: root._bottomHandlePoint
         role: GraphHandle.Resize
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
@@ -313,7 +315,7 @@ BaseHandles {
         onClicked: root.handleClicked(root.roi, root.shape, bottomGraphHandle)
         onMoved: position => {
             root.handleMoved(bottomGraphHandle, position);
-            root.resized(root.resizedFromHandle(bottomGraphHandle, position));
+            root.resized(root._resizedFromHandle(bottomGraphHandle, position));
         }
     }
     GraphHandle {
@@ -326,7 +328,7 @@ BaseHandles {
         hoverFillColor: root.handleHoverFillColor
         movable: root.movable
         objectName: "center"
-        position: root.centerPoint
+        position: root._centerPoint
         role: GraphHandle.Move
         selected: root.selected
         selectedFillColor: root.handleSelectedFillColor
