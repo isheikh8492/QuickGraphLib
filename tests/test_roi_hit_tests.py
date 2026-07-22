@@ -111,3 +111,7 @@ def test_graph_handle_stacking_default_and_override() -> None:
 
 def test_ellipse_geometry_across_data_rects_and_transforms() -> None:
     _run_qml_test("EllipseGeometryTests.qml")
+
+
+def test_rectangle_handles_geometry_across_rects_and_transforms() -> None:
+    _run_qml_test("RectangleHandlesGeometryTests.qml")

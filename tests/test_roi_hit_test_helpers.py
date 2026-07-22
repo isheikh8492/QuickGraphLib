@@ -81,6 +81,35 @@ def test_normalized_rect_makes_dimensions_non_negative() -> None:
     ) == QtCore.QRectF(2, 3, 0, 0)
 
 
+@pytest.mark.parametrize(
+    ("position", "anchor", "minimum_size", "signs", "expected"),
+    [
+        ((1, 1), (8, 6), (0, 0), (-1, -1), (1, 1, 7, 5)),
+        ((9, 1), (2, 6), (0, 0), (1, -1), (2, 1, 7, 5)),
+        ((1, 7), (8, 2), (0, 0), (-1, 1), (1, 2, 7, 5)),
+        ((9, 7), (2, 2), (0, 0), (1, 1), (2, 2, 7, 5)),
+        ((10, 10), (8, 6), (0.5, 0.25), (-1, -1), (7.5, 5.75, 0.5, 0.25)),
+        ((0, 10), (2, 6), (0.5, 0.25), (1, -1), (2, 5.75, 0.5, 0.25)),
+        ((10, 0), (8, 2), (0.5, 0.25), (-1, 1), (7.5, 2, 0.5, 0.25)),
+        ((0, 0), (2, 2), (0.5, 0.25), (1, 1), (2, 2, 0.5, 0.25)),
+        ((10, 10), (8, 6), (-1, -1), (-1, -1), (8, 6, 0, 0)),
+    ],
+)
+def test_clamped_resize_rect_preserves_direction_and_minimum_size(
+    position: tuple[float, float],
+    anchor: tuple[float, float],
+    minimum_size: tuple[float, float],
+    signs: tuple[int, int],
+    expected: tuple[float, float, float, float],
+) -> None:
+    assert QuickGraphLib.Helpers.clampedResizeRect(
+        QtCore.QPointF(*position),
+        QtCore.QPointF(*anchor),
+        *minimum_size,
+        *signs,
+    ) == QtCore.QRectF(*expected)
+
+
 def test_is_inside_ellipse_rejects_invalid_radii() -> None:
     center = QtCore.QPointF(5, 4)
 

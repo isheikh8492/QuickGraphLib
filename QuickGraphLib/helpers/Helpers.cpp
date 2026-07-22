@@ -227,6 +227,33 @@ QRectF Helpers::normalizedRect(QRectF rect) {
 }
 
 /*!
+    \fn QRectF Helpers::clampedResizeRect(QPointF position, QPointF anchor, qreal minimumWidth,
+                                          qreal minimumHeight, int xSign, int ySign)
+
+    Returns a normalized rectangle between \a anchor and \a position. The position is clamped to
+    preserve the non-negative \a minimumWidth and \a minimumHeight in the directions indicated by
+    \a xSign and \a ySign.
+*/
+QRectF Helpers::clampedResizeRect(QPointF position, QPointF anchor, qreal minimumWidth, qreal minimumHeight, int xSign,
+                                  int ySign) {
+    /*!
+        \qmlmethod rect Helpers::clampedResizeRect(point position, point anchor, real minimumWidth,
+                                                    real minimumHeight, int xSign, int ySign)
+
+        Returns a normalized rectangle between \a anchor and \a position. The position is clamped
+        to preserve the non-negative \a minimumWidth and \a minimumHeight in the directions
+        indicated by \a xSign and \a ySign.
+    */
+    minimumWidth = std::max<qreal>(0, minimumWidth);
+    minimumHeight = std::max<qreal>(0, minimumHeight);
+    position.setX(xSign < 0 ? std::min(position.x(), anchor.x() - minimumWidth)
+                            : std::max(position.x(), anchor.x() + minimumWidth));
+    position.setY(ySign < 0 ? std::min(position.y(), anchor.y() - minimumHeight)
+                            : std::max(position.y(), anchor.y() + minimumHeight));
+    return QRectF(position, anchor).normalized();
+}
+
+/*!
     \fn qreal Helpers::distanceToSegment(QPointF point, QPointF segmentStart, QPointF segmentEnd)
 
     Returns the shortest distance from \a point to the line segment from \a segmentStart to \a segmentEnd.

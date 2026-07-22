@@ -27,15 +27,17 @@ BaseHandles {
     readonly property point _bottomLeftPoint: Qt.point(_dataLeft, _dataBottom)
     readonly property point _bottomRightPoint: Qt.point(_dataRight, _dataBottom)
     readonly property point _centerPoint: Qt.point((_dataLeft + _dataRight) / 2, (_dataTop + _dataBottom) / 2)
-    readonly property real _dataBottom: Math.max(dataRect.y, dataRect.y + dataRect.height)
-    readonly property real _dataLeft: Math.min(dataRect.x, dataRect.x + dataRect.width)
-    readonly property real _dataRight: Math.max(dataRect.x, dataRect.x + dataRect.width)
-    readonly property real _dataTop: Math.min(dataRect.y, dataRect.y + dataRect.height)
+    readonly property real _dataBottom: _normalizedDataRect.bottom
+    readonly property real _dataLeft: _normalizedDataRect.left
+    readonly property real _dataRight: _normalizedDataRect.right
+    readonly property real _dataTop: _normalizedDataRect.top
     property point _lastDragPoint: Qt.point(0, 0)
     readonly property point _mappedBottomLeft: dataTransform.map(_bottomLeftPoint)
     readonly property point _mappedBottomRight: dataTransform.map(_bottomRightPoint)
+    readonly property rect _mappedRect: dataTransform.mapRect(_normalizedDataRect)
     readonly property point _mappedTopLeft: dataTransform.map(_topLeftPoint)
     readonly property point _mappedTopRight: dataTransform.map(_topRightPoint)
+    readonly property rect _normalizedDataRect: QuickGraphLib.Helpers.normalizedRect(dataRect)
     readonly property point _topLeftPoint: Qt.point(_dataLeft, _dataTop)
     readonly property point _topRightPoint: Qt.point(_dataRight, _dataTop)
     /*!
@@ -128,36 +130,24 @@ BaseHandles {
     function _bodyScenePoint(localPoint) {
         return root.mapFromItem(bodyMouseArea, localPoint);
     }
-    function _clampedResizePoint(position, anchor, xSign, ySign) {
-        let minimumWidth = Math.max(0, root.minimumDataWidth);
-        let minimumHeight = Math.max(0, root.minimumDataHeight);
-        return Qt.point(xSign < 0 ? Math.min(position.x, anchor.x - minimumWidth) : Math.max(position.x, anchor.x + minimumWidth), ySign < 0 ? Math.min(position.y, anchor.y - minimumHeight) : Math.max(position.y, anchor.y + minimumHeight));
-    }
     function _containsBodyPoint(localPoint) {
         return _containsBodyScenePoint(_bodyScenePoint(localPoint));
     }
     function _containsBodyScenePoint(scenePoint) {
         return QuickGraphLib.Helpers.isInsidePolygon(scenePoint, [_mappedTopLeft, _mappedTopRight, _mappedBottomRight, _mappedBottomLeft]);
     }
-    function _normalizedRect(point1, point2) {
-        let left = Math.min(point1.x, point2.x);
-        let right = Math.max(point1.x, point2.x);
-        let top = Math.min(point1.y, point2.y);
-        let bottom = Math.max(point1.y, point2.y);
-        return Qt.rect(left, top, right - left, bottom - top);
-    }
     function _resizedFromHandle(handle, position) {
         if (handle.objectName === "topLeft") {
-            return root._normalizedRect(root._clampedResizePoint(position, root._bottomRightPoint, -1, -1), root._bottomRightPoint);
+            return QuickGraphLib.Helpers.clampedResizeRect(position, root._bottomRightPoint, root.minimumDataWidth, root.minimumDataHeight, -1, -1);
         }
         if (handle.objectName === "topRight") {
-            return root._normalizedRect(root._clampedResizePoint(position, root._bottomLeftPoint, 1, -1), root._bottomLeftPoint);
+            return QuickGraphLib.Helpers.clampedResizeRect(position, root._bottomLeftPoint, root.minimumDataWidth, root.minimumDataHeight, 1, -1);
         }
         if (handle.objectName === "bottomLeft") {
-            return root._normalizedRect(root._clampedResizePoint(position, root._topRightPoint, -1, 1), root._topRightPoint);
+            return QuickGraphLib.Helpers.clampedResizeRect(position, root._topRightPoint, root.minimumDataWidth, root.minimumDataHeight, -1, 1);
         }
         if (handle.objectName === "bottomRight") {
-            return root._normalizedRect(root._clampedResizePoint(position, root._topLeftPoint, 1, 1), root._topLeftPoint);
+            return QuickGraphLib.Helpers.clampedResizeRect(position, root._topLeftPoint, root.minimumDataWidth, root.minimumDataHeight, 1, 1);
         }
         return root.dataRect;
     }
@@ -170,18 +160,13 @@ BaseHandles {
     MouseArea {
         id: bodyMouseArea
 
-        property real _bodyBottom: Math.max(root._mappedTopLeft.y, root._mappedTopRight.y, root._mappedBottomLeft.y, root._mappedBottomRight.y)
-        property real _bodyLeft: Math.min(root._mappedTopLeft.x, root._mappedTopRight.x, root._mappedBottomLeft.x, root._mappedBottomRight.x)
-        property real _bodyRight: Math.max(root._mappedTopLeft.x, root._mappedTopRight.x, root._mappedBottomLeft.x, root._mappedBottomRight.x)
-        property real _bodyTop: Math.min(root._mappedTopLeft.y, root._mappedTopRight.y, root._mappedBottomLeft.y, root._mappedBottomRight.y)
-
         cursorShape: root.movable ? Qt.SizeAllCursor : Qt.ArrowCursor
         enabled: root.enabled
-        height: _bodyBottom - _bodyTop
+        height: root._mappedRect.height
         hoverEnabled: true
-        width: _bodyRight - _bodyLeft
-        x: _bodyLeft
-        y: _bodyTop
+        width: root._mappedRect.width
+        x: root._mappedRect.x
+        y: root._mappedRect.y
 
         onExited: root._bodyHovered = false
         onPositionChanged: event => {
