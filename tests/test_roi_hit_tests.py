@@ -109,6 +109,42 @@ def test_graph_handle_stacking_default_and_override() -> None:
     _run_qml_test("GraphHandleStackingTests.qml", click_overlapping_handle)
 
 
+def test_roi_click_signals_distinguish_body_and_handle() -> None:
+    def click_body_and_handle(item, app) -> None:
+        window = QtQuick.QQuickWindow()
+        window.resize(int(item.width()), int(item.height()))
+        item.setParentItem(window.contentItem())
+        window.show()
+        app.processEvents()
+
+        try:
+            QtTest.QTest.mouseClick(
+                window,
+                QtCore.Qt.MouseButton.LeftButton,
+                QtCore.Qt.KeyboardModifier.NoModifier,
+                QtCore.QPoint(50, 50),
+            )
+            app.processEvents()
+            assert item.property("bodyClickCount") == 1
+            assert item.property("handleClickCount") == 0
+
+            QtTest.QTest.mouseClick(
+                window,
+                QtCore.Qt.MouseButton.LeftButton,
+                QtCore.Qt.KeyboardModifier.NoModifier,
+                QtCore.QPoint(20, 20),
+            )
+            app.processEvents()
+            assert item.property("bodyClickCount") == 1
+            assert item.property("handleClickCount") == 1
+            assert item.property("clickedExpectedHandle")
+        finally:
+            item.setParentItem(None)
+            window.close()
+
+    _run_qml_test("RoiClickSignalTests.qml", click_body_and_handle)
+
+
 def test_ellipse_geometry_across_data_rects_and_transforms() -> None:
     _run_qml_test("EllipseGeometryTests.qml")
 

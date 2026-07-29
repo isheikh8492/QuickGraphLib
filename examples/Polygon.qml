@@ -50,7 +50,6 @@ QGLPreFabs.XYAxes {
         movable: true
         points: axes.editablePoints
         selected: axes.polygonSelected
-        shape: editablePolygon
 
         onBodyClicked: axes.polygonSelected = true
         onHandleClicked: axes.polygonSelected = true

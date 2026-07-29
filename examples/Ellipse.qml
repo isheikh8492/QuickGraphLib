@@ -46,7 +46,6 @@ QGLPreFabs.XYAxes {
         handleMode: QGLGraphItems.EllipseHandles.Cardinal
         movable: true
         selected: axes.ellipseSelected
-        shape: editableEllipse
 
         onBodyClicked: axes.ellipseSelected = true
         onHandleClicked: axes.ellipseSelected = true

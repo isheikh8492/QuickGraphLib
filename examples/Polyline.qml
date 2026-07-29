@@ -48,7 +48,6 @@ QGLPreFabs.XYAxes {
         movable: true
         points: axes.editablePoints
         selected: axes.polylineSelected
-        shape: editablePolyline
 
         onBodyClicked: axes.polylineSelected = true
         onHandleClicked: axes.polylineSelected = true

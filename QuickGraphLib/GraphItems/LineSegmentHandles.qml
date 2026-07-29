@@ -164,7 +164,7 @@ BaseHandles {
                 return;
             }
             root._bodyDragging = true;
-            root.bodyClicked(root.roi, root.shape);
+            root.bodyClicked();
             root._lastDragPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
         }
         onReleased: {
@@ -191,7 +191,7 @@ BaseHandles {
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== LineSegmentHandles.NoHandles
 
-        onClicked: root.handleClicked(root.roi, root.shape, point1GraphHandle)
+        onClicked: root.handleClicked(point1GraphHandle)
         onMoved: position => {
             root.handleMoved(point1GraphHandle, position);
             root.point1Moved(position);
@@ -217,7 +217,7 @@ BaseHandles {
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== LineSegmentHandles.NoHandles
 
-        onClicked: root.handleClicked(root.roi, root.shape, point2GraphHandle)
+        onClicked: root.handleClicked(point2GraphHandle)
         onMoved: position => {
             root.handleMoved(point2GraphHandle, position);
             root.point2Moved(position);
@@ -243,7 +243,7 @@ BaseHandles {
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode === LineSegmentHandles.EndpointsAndCenter
 
-        onClicked: root.handleClicked(root.roi, root.shape, centerGraphHandle)
+        onClicked: root.handleClicked(centerGraphHandle)
         onMoved: position => {
             root.handleMoved(centerGraphHandle, position);
             root.moved(Qt.point(position.x - centerGraphHandle.position.x, position.y - centerGraphHandle.position.y));

@@ -120,7 +120,7 @@ BaseHandles {
             strokeWidth: root.handleStrokeWidth
             visible: root.handlesVisible
 
-            onClicked: root.handleClicked(root.roi, root.shape, vertexGraphHandle)
+            onClicked: root.handleClicked(vertexGraphHandle)
             onMoved: position => {
                 root.handleMoved(vertexGraphHandle, position);
                 root.pointMoved(index, position);
@@ -160,7 +160,7 @@ BaseHandles {
                 return;
             }
             root._bodyDragging = true;
-            root.bodyClicked(root.roi, root.shape);
+            root.bodyClicked();
             root._lastDragPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
         }
         onReleased: {

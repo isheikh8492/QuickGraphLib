@@ -200,7 +200,7 @@ BaseHandles {
                 return;
             }
             root._bodyDragging = true;
-            root.bodyClicked(root.roi, root.shape);
+            root.bodyClicked();
             root._lastDragPoint = root.dataTransform.inverted().map(root.mapFromItem(bodyMouseArea, Qt.point(event.x, event.y)));
         }
         onReleased: {
@@ -227,7 +227,7 @@ BaseHandles {
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
 
-        onClicked: root.handleClicked(root.roi, root.shape, leftGraphHandle)
+        onClicked: root.handleClicked(leftGraphHandle)
         onMoved: position => {
             root.handleMoved(leftGraphHandle, position);
             root.resized(root._resizedFromHandle(leftGraphHandle, position));
@@ -253,7 +253,7 @@ BaseHandles {
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
 
-        onClicked: root.handleClicked(root.roi, root.shape, rightGraphHandle)
+        onClicked: root.handleClicked(rightGraphHandle)
         onMoved: position => {
             root.handleMoved(rightGraphHandle, position);
             root.resized(root._resizedFromHandle(rightGraphHandle, position));
@@ -279,7 +279,7 @@ BaseHandles {
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
 
-        onClicked: root.handleClicked(root.roi, root.shape, topGraphHandle)
+        onClicked: root.handleClicked(topGraphHandle)
         onMoved: position => {
             root.handleMoved(topGraphHandle, position);
             root.resized(root._resizedFromHandle(topGraphHandle, position));
@@ -305,7 +305,7 @@ BaseHandles {
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode !== EllipseHandles.NoHandles
 
-        onClicked: root.handleClicked(root.roi, root.shape, bottomGraphHandle)
+        onClicked: root.handleClicked(bottomGraphHandle)
         onMoved: position => {
             root.handleMoved(bottomGraphHandle, position);
             root.resized(root._resizedFromHandle(bottomGraphHandle, position));
@@ -331,7 +331,7 @@ BaseHandles {
         strokeWidth: root.handleStrokeWidth
         visible: root.handlesVisible && root.handleMode === EllipseHandles.CardinalAndCenter
 
-        onClicked: root.handleClicked(root.roi, root.shape, centerGraphHandle)
+        onClicked: root.handleClicked(centerGraphHandle)
         onMoved: position => {
             root.handleMoved(centerGraphHandle, position);
             root.moved(Qt.point(position.x - centerGraphHandle.position.x, position.y - centerGraphHandle.position.y));

@@ -46,7 +46,6 @@ QGLPreFabs.XYAxes {
         handleMode: QGLGraphItems.RectangleHandles.Corners
         movable: true
         selected: axes.rectangleSelected
-        shape: editableRectangle
 
         onBodyClicked: axes.rectangleSelected = true
         onHandleClicked: axes.rectangleSelected = true

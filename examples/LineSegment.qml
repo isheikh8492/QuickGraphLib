@@ -50,7 +50,6 @@ QGLPreFabs.XYAxes {
         point1: axes.editablePoint1
         point2: axes.editablePoint2
         selected: axes.lineSegmentSelected
-        shape: editableLineSegment
 
         onBodyClicked: axes.lineSegmentSelected = true
         onHandleClicked: axes.lineSegmentSelected = true
