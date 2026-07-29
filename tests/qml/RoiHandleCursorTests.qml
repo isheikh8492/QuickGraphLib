@@ -65,15 +65,9 @@ QGLPreFabs.XYAxes {
             assertHandleObjectName(lineRoi.centerHandle, "center");
             for (let index = 0; index < polylineRoi.handles.length; ++index) {
                 assertHandleObjectName(polylineRoi.handles[index], "point" + index);
-                if (polylineRoi._handleIndex(polylineRoi.handles[index]) !== index) {
-                    throw new Error("polyline handle index mismatch at " + index);
-                }
             }
             for (let index = 0; index < polygonRoi.handles.length; ++index) {
                 assertHandleObjectName(polygonRoi.handles[index], "point" + index);
-                if (polygonRoi._handleIndex(polygonRoi.handles[index]) !== index) {
-                    throw new Error("polygon handle index mismatch at " + index);
-                }
             }
             completedSuccessfully = true;
         } catch (error) {

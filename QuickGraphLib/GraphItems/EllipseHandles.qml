@@ -139,27 +139,20 @@ BaseHandles {
         let radiusY = Math.abs(root._mappedTopHandle.y - root._mappedCenter.y);
         return QuickGraphLib.Helpers.isInsideEllipse(scenePoint, root._mappedCenter, radiusX, radiusY);
     }
-    function _normalizedRect(left, top, right, bottom) {
-        let normalizedLeft = Math.min(left, right);
-        let normalizedRight = Math.max(left, right);
-        let normalizedTop = Math.min(top, bottom);
-        let normalizedBottom = Math.max(top, bottom);
-        return Qt.rect(normalizedLeft, normalizedTop, normalizedRight - normalizedLeft, normalizedBottom - normalizedTop);
-    }
     function _resizedFromHandle(handle, position) {
         let minimumWidth = Math.max(0, root.minimumDataWidth);
         let minimumHeight = Math.max(0, root.minimumDataHeight);
         if (handle.objectName === "left") {
-            return _normalizedRect(Math.min(position.x, root._dataRight - minimumWidth), root._dataTop, root._dataRight, root._dataBottom);
+            return QuickGraphLib.Helpers.clampedResizeRect(Qt.point(position.x, root._dataTop), Qt.point(root._dataRight, root._dataBottom), minimumWidth, 0, -1, -1);
         }
         if (handle.objectName === "right") {
-            return _normalizedRect(root._dataLeft, root._dataTop, Math.max(position.x, root._dataLeft + minimumWidth), root._dataBottom);
+            return QuickGraphLib.Helpers.clampedResizeRect(Qt.point(position.x, root._dataBottom), Qt.point(root._dataLeft, root._dataTop), minimumWidth, 0, 1, 1);
         }
         if (handle.objectName === "top") {
-            return _normalizedRect(root._dataLeft, Math.min(position.y, root._dataBottom - minimumHeight), root._dataRight, root._dataBottom);
+            return QuickGraphLib.Helpers.clampedResizeRect(Qt.point(root._dataLeft, position.y), Qt.point(root._dataRight, root._dataBottom), 0, minimumHeight, -1, -1);
         }
         if (handle.objectName === "bottom") {
-            return _normalizedRect(root._dataLeft, root._dataTop, root._dataRight, Math.max(position.y, root._dataTop + minimumHeight));
+            return QuickGraphLib.Helpers.clampedResizeRect(Qt.point(root._dataRight, position.y), Qt.point(root._dataLeft, root._dataTop), 0, minimumHeight, 1, 1);
         }
         return root.dataRect;
     }

@@ -82,9 +82,6 @@ BaseHandles {
     function _containsBodyScenePoint(scenePoint) {
         return QuickGraphLib.Helpers.isNearPolyline(scenePoint, _mappedPoints, hitWidth, false);
     }
-    function _handleIndex(handle) {
-        return parseInt(handle.objectName.slice(5));
-    }
 
     height: parent ? parent.height : 0
     width: parent ? parent.width : 0

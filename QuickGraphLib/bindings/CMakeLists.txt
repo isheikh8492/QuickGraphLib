@@ -77,10 +77,7 @@ shiboken_generator_create_binding(
         ${CMAKE_CURRENT_BINARY_DIR}/QuickGraphLib/_QuickGraphLib/qglpolygonf_wrapper.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/QuickGraphLib/_QuickGraphLib/qgldoublelist_wrapper.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/QuickGraphLib/_QuickGraphLib/helpers_wrapper.cpp
-    HEADERS
-        ${CMAKE_CURRENT_SOURCE_DIR}/Bindings.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../DataTypes.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../helpers/Helpers.hpp
+    HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/Bindings.hpp
     TYPESYSTEM_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Bindings.xml
     LIBRARY_TARGET QuickGraphLib
     FORCE_LIMITED_API

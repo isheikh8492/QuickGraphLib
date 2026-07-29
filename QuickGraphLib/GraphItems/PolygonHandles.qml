@@ -83,9 +83,6 @@ BaseHandles {
     function _containsBodyScenePoint(scenePoint) {
         return QuickGraphLib.Helpers.isInsidePolygon(scenePoint, _mappedPoints) || QuickGraphLib.Helpers.isNearPolyline(scenePoint, _mappedPoints, hitPadding * 2, true);
     }
-    function _handleIndex(handle) {
-        return parseInt(handle.objectName.slice(5));
-    }
 
     height: parent ? parent.height : 0
     width: parent ? parent.width : 0

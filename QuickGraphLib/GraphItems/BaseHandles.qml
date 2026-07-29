@@ -65,21 +65,21 @@ Item {
     */
     property bool selected: false
     /*!
-        The rendered graph item associated with this handle overlay.
+        The rendered graph object associated with this handle overlay.
 
-        The handle overlay does not take ownership of this item.
+        The handle overlay does not take ownership of this object.
     */
-    property Item shape: null
+    property QtObject shape: null
 
     /*!
         Emitted with the associated \a roi and \a shape when the body of the handle item is clicked.
     */
-    signal bodyClicked(QtObject roi, Item shape)
+    signal bodyClicked(QtObject roi, QtObject shape)
 
     /*!
         Emitted with the associated \a roi and \a shape when \a handle is clicked.
     */
-    signal handleClicked(QtObject roi, Item shape, GraphHandle handle)
+    signal handleClicked(QtObject roi, QtObject shape, GraphHandle handle)
 
     /*!
         Emitted when \a handle has moved to \a position in data coordinates.
